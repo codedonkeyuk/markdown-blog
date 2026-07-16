@@ -1,4 +1,24 @@
 #post-details {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.post-image-banner {
+  width: 100%;
+  margin: 10px 5px;
+}
+
+.post-image-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  #post-details {
+    justify-content: center;
+  }
 }
