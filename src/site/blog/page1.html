@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--INJECT-META-OG-URL-START-->
+    <meta property="og:url" content="http://localhost:3001/blog/post/post" />
+    <!--INJECT-META-OG-URL-END-->
+    <!--INJECT-META-OG-TITLE-START-->
+    <meta property="og:title" content="Blog" />
+    <!--INJECT-META-OG-TITLE-END-->
+    <!--INJECT-META-OG-DESCRIPTION-START-->
+    <meta property="og:description" content="Blog" />
+    <!--INJECT-META-OG-DESCRIPTION-END-->
+    <meta
+      property="og:image"
+      content="http://localhost:3001/images/social-thumbnail.png"
+    />
+    <!--INJECT-TITLE-START-->
+    <title>Blog</title>
+    <!--INJECT-TITLE-END-->
+    <!--INJECT-CANONICAL-START-->
+    <link rel="canonical" href="http://localhost:3001/blog/page1" />
+    <!--INJECT-CANONICAL-END-->
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="navigation">
+        <nav>
+          <h2 class="hide">Navigation</h2>
+          <ul id="main-navigation-links">
+            <li><a href="/index.html">Index</a></li>
+            <li><a href="/blog/page1.html">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div id="page">
+        <main>
+          <header>
+            <h1>Posts</h1>
+          </header>
+          <p>The mad thoughts of a rambling individual!</p>
+          <section class="post-page-list">
+            <!--INJECT-POSTS-START-->
+            <article class="post-page-article">
+              <div class="post-page-article-thumbnail">
+                <!--INJECT-POST-TEMPLATE-THUMBNAIL-START-->
+                <picture>
+                  <source
+                    media="(min-width: 700px)"
+                    srcset="/images/thumbnail.svg"
+                  />
+                  <img
+                    alt="A descriptive caption"
+                    src="/images/post-image.svg"
+                  />
+                </picture>
+                <!--INJECT-POST-TEMPLATE-THUMBNAIL-END-->
+              </div>
+              <div class="post-page-article-content">
+                <header>
+                  <!--INJECT-POST-TEMPLATE-HEADING-START-->
+                  <a href="./post/post"><h2>An Example Post</h2></a>
+                  <!--INJECT-POST-TEMPLATE-HEADING-END-->
+                </header>
+                <p>
+                  <!--INJECT-POST-TEMPLATE-DESCRIPTION-START-->
+                  Pellentesque habitant morbi tristique senectus et netus et
+                  malesuada fames ac turpis egestas. Vestibulum tortor quam,
+                  feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu
+                  libero sit amet quam egestas semper. Aenean ultricies mi vitae
+                  est...
+                  <!--INJECT-POST-TEMPLATE-DESCRIPTION-END-->
+                </p>
+                <footer class="post-page-article-footer">
+                  <div class="post-page-article-footer-item">
+                    <strong>Author:</strong>
+                    <!--INJECT-POST-TEMPLATE-AUTHOR-START-->Joe Bloggs<!--INJECT-POST-TEMPLATE-AUTHOR-END-->
+                  </div>
+                  <div class="post-page__article-footer-date">
+                    <strong>Date:</strong>
+                    <!--INJECT-POST-TEMPLATE-DATE-START-->Wed Mar 25 2026<!--INJECT-POST-TEMPLATE-DATE-END-->
+                  </div>
+                  <div class="post-page__article-footer-time">
+                    <strong>Time (GMT):</strong>
+                    <!--INJECT-POST-TEMPLATE-TIME-START-->8:15am<!--INJECT-POST-TEMPLATE-TIME-END-->
+                  </div>
+                </footer>
+              </div>
+            </article>
+            <!--INJECT-POSTS-END-->
+          </section>
+          <!--INJECT-POSTS-NAV-START-->
+          <footer class="post-page-navigation">
+            <nav aria-label="Page Navigation">
+              <!--INJECT-POSTS-NAV-PREV-START-->
+              <a href="#">Prev</a>
+              <!--INJECT-POSTS-NAV-PREV-END-->
+              <!--INJECT-POSTS-NAV-NEXT-START-->
+              <a href="#">Next</a>
+              <!--INJECT-POSTS-NAV-NEXT-END-->
+            </nav>
+          </footer>
+          <!--INJECT-POSTS-NAV-END-->
+        </main>
+      </div>
+    </div>
+    <div class="container">
+      <div id="footer">
+        <footer>Im a footer</footer>
+      </div>
+    </div>
+  </body>
+</html>

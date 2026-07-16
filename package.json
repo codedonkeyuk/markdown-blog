@@ -1,14 +1,14 @@
 {
   "name": "markdown-blog",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A static site that converts markdown into blog pages",
-  "homepage": "https://github.com/leighgordy/markdown-blog#readme",
+  "homepage": "https://github.com/codedonkeyuk/markdown-blog#readme",
   "bugs": {
-    "url": "https://github.com/leighgordy/markdown-blog/issues"
+    "url": "https://github.com/codedonkeyuk/markdown-blog/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leighgordy/markdown-blog.git"
+    "url": "git+https://github.com/codedonkeyuk/markdown-blog.git"
   },
   "license": "UNLICENCED",
   "private": "true",
@@ -16,22 +16,35 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "validate": "prettier . --check && tsc --noEmit",
+    "validate": "node src/code/html-validate/html-validate-dev.ts && prettier . --check && tsc --noEmit",
     "clean": "prettier . --write",
-    "createPost": "node code/create-post/app.ts",
+    "createPost": "node src/code/create-post/app.ts",
+    "deleteDist": "node src/code/delete-dist/app.ts",
     "prebuild": "npm run validate",
-    "build": "node code/blog-generation/app.ts",
-    "serveProd": "node code/server/app.ts",
-    "serveDev": "node code/server/app.ts src",
+    "build": "node src/code/blog-generation/app.ts && node src/code/html-validate/html-validate-prod.ts",
+    "serveDev": "node src/code/serve-site/app.ts",
+    "serveProd": "node src/code/serve-site/app.ts ./dist",
     "test": "node --test --experimental-test-module-mocks \"**/*.test.ts\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploySubmodule": "npm run build && test -f dist/index.html && cd dist && git checkout main && git add -A && git commit -m \"Site update: $(date +'%Y-%m-%d %H:%M:%S')\" && git push origin main",
+    "deploySite": "npm run build && node src/code/deploy-site/app.ts"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.3.5",
-    "express": "^5.2.1",
+    "@types/clean-css": "^4.2.11",
+    "@types/html-minifier-terser": "^7.0.2",
+    "@types/live-server": "^1.2.3",
+    "@types/node": "^25.9.4",
+    "@types/ssh2-sftp-client": "^9.0.6",
+    "clean-css": "^5.3.3",
+    "html-minifier-terser": "^7.2.0",
     "husky": "^9.1.7",
+    "live-server": "^1.2.2",
     "prettier": "3.8.1",
+    "terser": "^5.49.0",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "html-validate": "^11.5.5",
+    "shiki": "^4.3.1"
   }
 }

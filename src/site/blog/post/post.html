@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:type" content="article" />
+    <!--INJECT-META-OG-URL-START-->
+    <meta property="og:url" content="http://localhost:8080/blog/post/post" />
+    <!--INJECT-META-OG-URL-END-->
+    <!--INJECT-META-OG-TITLE-START-->
+    <meta property="og:title" content="Blog entry" />
+    <!--INJECT-META-OG-TITLE-END-->
+    <!--INJECT-META-OG-DESCRIPTION-START-->
+    <meta property="og:description" content="Blog entry" />
+    <!--INJECT-META-OG-DESCRIPTION-END-->
+    <!--INJECT-META-OG-IMAGE-START-->
+    <meta
+      property="og:image"
+      content="http://localhost:8080/images/social-thumbnail.png"
+    />
+    <!--INJECT-META-OG-IMAGE-END-->
+    <!--INJECT-POST-CANONICAL-START-->
+    <link rel="canonical" href="http://localhost:8080/page/post" />
+    <!--INJECT-POST-CANONICAL-END-->
+    <link rel="stylesheet" href="/css/main.css" />
+    <!--INJECT-POST-TITLE-START-->
+    <title>post header</title>
+    <!--INJECT-POST-TITLE-END-->
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="navigation">
+        <nav>
+          <h2 class="hide">Navigation</h2>
+          <ul id="main-navigation-links">
+            <li><a href="/index.html">Index</a></li>
+            <li><a href="/blog/page1.html">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div id="page">
+        <main>
+          <header>
+            <h1>
+              <!--INJECT-POST-HEADING-START-->
+              An Example Post
+              <!--INJECT-POST-HEADING-END-->
+            </h1>
+            <div id="post-details">
+              <div class="post-details-author">
+                Author:
+                <!--INJECT-POST-AUTHOR-START-->Joe Bloggs<!--INJECT-POST-AUTHOR-END-->
+              </div>
+              <div class="post-details-date">
+                Date:
+                <!--INJECT-POST-DATE-START-->Wed Mar 25 2026<!--INJECT-POST-DATE-END-->
+              </div>
+              <div class="post-details-time">
+                Time (GMT):
+                <!--INJECT-POST-TIME-START-->8:15am<!--INJECT-POST-TIME-END-->
+              </div>
+            </div>
+            <div class="post-image-banner">
+              <!--INJECT-POST-IMAGE-START-->
+              <img
+                src="/images/post-image.svg"
+                alt="Post Image"
+                width="1200"
+                height="400"
+              />
+              <!--INJECT-POST-IMAGE-END-->
+            </div>
+          </header>
+          <div id="post-content">
+            <!--INJECT-POST-CONTENT-START-->
+            <p>
+              This is an introductory paragraph testing your sequential pipeline
+              layout. Everything here should be wrapped cleanly in a single
+              paragraph block.
+            </p>
+            <div class="code-block-container">
+              <div class="code-block-body">
+                <pre
+                  class="shiki github-dark-high-contrast"
+                  style="background-color: #0a0c10; color: #f0f3f6"
+                  tabindex="0"
+                ><code><span class="line"><span style="color:#bdc4cc">// Testing Shiki Local Asynchronous Parsing</span></span>
+<span class="line"><span style="color:#ff9492">import</span><span style="color:#f0f3f6"> { parseMarkdownToHtml } </span><span style="color:#ff9492">from</span><span style="color:#addcff"> "./markdownParser.ts"</span><span style="color:#f0f3f6">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#ff9492">export</span><span style="color:#ff9492"> async</span><span style="color:#ff9492"> function</span><span style="color:#dbb7ff"> generateBlog</span><span style="color:#f0f3f6">() {</span></span>
+<span class="line"><span style="color:#ff9492">  const</span><span style="color:#91cbff"> rawMarkdown</span><span style="color:#ff9492"> =</span><span style="color:#addcff"> "# Hello World</span><span style="color:#ff9492">\n</span><span style="color:#addcff">```ts</span><span style="color:#ff9492">\n</span><span style="color:#addcff">const x = 42;</span><span style="color:#ff9492">\n</span><span style="color:#addcff">```"</span><span style="color:#f0f3f6">;</span></span>
+<span class="line"><span style="color:#ff9492">  const</span><span style="color:#91cbff"> html</span><span style="color:#ff9492"> =</span><span style="color:#ff9492"> await</span><span style="color:#dbb7ff"> parseMarkdownToHtml</span><span style="color:#f0f3f6">(rawMarkdown);</span></span>
+<span class="line"><span style="color:#f0f3f6">  console.</span><span style="color:#dbb7ff">log</span><span style="color:#f0f3f6">(</span><span style="color:#addcff">"Output HTML:"</span><span style="color:#f0f3f6">, html);</span></span>
+<span class="line"><span style="color:#f0f3f6">}</span></span>
+</code></pre>
+              </div>
+              <div class="code-block-footer">
+                <span class="code-lang-label">typescript</span>
+                <button
+                  class="copy-btn"
+                  data-code="Ly8gVGVzdGluZyBTaGlraSBMb2NhbCBBc3luY2hyb25vdXMgUGFyc2luZwppbXBvcnQgeyBwYXJzZU1hcmtkb3duVG9IdG1sIH0gZnJvbSAiLi9tYXJrZG93blBhcnNlci50cyI7CgpleHBvcnQgYXN5bmMgZnVuY3Rpb24gZ2VuZXJhdGVCbG9nKCkgewogIGNvbnN0IHJhd01hcmtkb3duID0gIiMgSGVsbG8gV29ybGRcbmBgYHRzXG5jb25zdCB4ID0gNDI7XG5gYGAiOwogIGNvbnN0IGh0bWwgPSBhd2FpdCBwYXJzZU1hcmtkb3duVG9IdG1sKHJhd01hcmtkb3duKTsKICBjb25zb2xlLmxvZygiT3V0cHV0IEhUTUw6IiwgaHRtbCk7Cn0="
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+            <h2>Testing List Layout Isolation</h2>
+            <p>
+              Let's ensure that our list compilers don't swallow the layout
+              newlines before and after these blocks:
+            </p>
+            <ol>
+              <li>First sequential ordered item</li>
+              <li>
+                Second sequential ordered item
+                <ol>
+                  <li>Deeply nested ordered item</li>
+                </ol>
+              </li>
+              <li>Back to the root list level</li>
+            </ol>
+            <ul>
+              <li>Standard bullet point item</li>
+              <li>
+                Another bullet item
+                <ul>
+                  <li>A two-space indented bullet sub-item</li>
+                  <li>Another nested bullet item</li>
+                </ul>
+              </li>
+            </ul>
+            <p>
+              The spacing right above this paragraph should remain pristine and
+              un-swallowed.
+            </p>
+            <h2>Testing Accessibility Rule Constraints</h2>
+            <p>Below are two images to test your error throwing logic:</p>
+            <p>This is a valid image with alt text and should pass:</p>
+            <p>
+              <img
+                src="/images/social-thumbnail.png"
+                alt="A sleek developer setup with an ultra-wide monitor on a wooden desk"
+              />
+            </p>
+            <p>
+              This is an empty link that should remain completely untouched by
+              the image parser:
+            </p>
+            <p>
+              <a href="https://example.com" target="_blank" rel="noopener"
+                >Click here to visit my homepage</a
+              >
+            </p>
+            <!--INJECT-POST-CONTENT-END-->
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="container">
+      <div id="footer">
+        <footer>Im a footer</footer>
+      </div>
+    </div>
+  </body>
+</html>
