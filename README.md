@@ -97,11 +97,3 @@ This project is very big and convoluted. I suspect ill break the templating logi
 | `npm run serveDev`   | serves dev site (no posts) with livereload. Available [http://localhost:3001](http://localhost:3001)                |
 | `npm run serveProd`  | serves prod site (with posts) with livereload. Available [http://localhost:3001](http://localhost:3001)             |
 | `npm run build`      | builds the project in dist directory. Combines site and blog into a static site ready for deployment                |
-
-### Git Submodule
-
-If you accidently delete the dist folder, then run the following comand in the root of the project to revive if.
-
-```
-git submodule update --init --recursive
-```
