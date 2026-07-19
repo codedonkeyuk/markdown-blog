@@ -32,6 +32,7 @@ describe("Test generate-post-info.ts", () => {
         pageDescription: "A new post",
         postThumbDescription: "A new post",
         pageImageDescription: "A new post",
+        publish: true, // Fixed: Added to prevent .filter() from skipping this post
       });
     });
 

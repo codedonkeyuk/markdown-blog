@@ -83,6 +83,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
       {
         name: "Post 2",
@@ -109,6 +110,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
     ];
 
@@ -163,6 +165,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
       {
         name: "Post 2",
@@ -189,6 +192,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
       {
         name: "Post 3",
@@ -215,6 +219,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
     ];
 
@@ -260,6 +265,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
       {
         name: "Post 3",
@@ -286,6 +292,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
       {
         name: "Post 2",
@@ -312,6 +319,7 @@ describe("Test generate-indexes.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "",
         author: "",
+        publish: true,
       },
     ];
 

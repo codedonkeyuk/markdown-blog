@@ -22,6 +22,7 @@ test("Spellcheck plugin validation pipeline", async (t) => {
     directory: "mock-test-post-directory",
     blogPage: "index.html",
     blogUrl: "https://example.com",
+    publish: true,
   };
 
   const targetDir = path.resolve(`${postSourcePath}/${mockPost.directory}`);

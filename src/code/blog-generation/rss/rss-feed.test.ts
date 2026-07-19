@@ -35,6 +35,7 @@ describe("Test rss-feed.ts", () => {
         postThumbDescription: "Thumb desc 1",
         pageImageDescription: "Image desc 1",
         author: "Alex Dev",
+        publish: true,
       },
       {
         nameSlug: "newer-post",
@@ -51,6 +52,7 @@ describe("Test rss-feed.ts", () => {
         postThumbDescription: "Thumb desc 2",
         pageImageDescription: "Image desc 2",
         author: "Sam Code",
+        publish: true,
       },
     ];
 
@@ -108,6 +110,7 @@ describe("Test rss-feed.ts", () => {
         postThumbDescription: "Thumb context.",
         pageImageDescription: "Image context.",
         author: "Author",
+        publish: true,
       }),
     );
 

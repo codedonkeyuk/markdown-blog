@@ -7,5 +7,6 @@
   "pageDescription": "A new post",
   "postThumbDescription": "A new post",
   "pageImageDescription": "A new post",
-  "author": "Lee G"
+  "author": "Lee G",
+  "publish": true
 }

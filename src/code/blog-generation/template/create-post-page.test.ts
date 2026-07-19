@@ -73,6 +73,7 @@ describe("Test create-post-page.ts", async () => {
       postThumbDescription: "This is a post image",
       pageImageDescription: "This is a page image",
       author: "Joe Bloggs",
+      publish: true,
     };
 
     const testee = await import("./create-post-page.ts");

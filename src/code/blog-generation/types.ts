@@ -8,6 +8,7 @@ export type PostInfoJson = {
   postThumbDescription: string;
   pageImageDescription: string;
   author: string;
+  publish: boolean;
 };
 
 export type PostInfo = PostInfoJson & {

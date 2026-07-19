@@ -40,6 +40,22 @@ Your new post can be found in [./src/blog-content](./src/blog-content).
 
 You can then tailer your blog entry however you like. Here is abreakdow nof the files and what the do
 
+### Prevent publication of the post
+
+Within your new post directory you will find a file labeld `postinfo.json`. Set it to false
+
+```json
+{
+  ...
+  "publish" : false,
+}
+```
+
+When publish is false its ignored by the site generator.
+Then when you are ready to publish change set it to `true`.
+
+This is handy when you need time to write the blog, and create the custom images.
+
 ### Create the site
 
 Once you are happy simple call

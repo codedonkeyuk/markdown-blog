@@ -19,6 +19,7 @@ describe("Test app.ts", () => {
       postThumbDescription: "thumbnail description",
       pageImageDescription: "page images description",
       author: "Joe Bloggs",
+      publish: true,
     },
   ];
 

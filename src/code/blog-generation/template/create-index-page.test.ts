@@ -46,6 +46,7 @@ describe("Test create-index-page.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "Post one thumbnail description",
         author: "",
+        publish: true,
       },
       {
         name: "Post 2",
@@ -62,6 +63,7 @@ describe("Test create-index-page.ts", async () => {
         postThumbDescription: "",
         pageImageDescription: "Post two thumbnail description",
         author: "",
+        publish: true,
       },
     ];
     const result = testee.default(pageTemplate, posts, 0, 1);
