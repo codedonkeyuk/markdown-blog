@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { minify as minifyJS, type MinifyOptions } from "terser";
-import CleanCSS from "clean-css";
+import * as lightningcss from "lightningcss"; // 1. Swapped out CleanCSS
 import {
   minify as minifyHTML,
   type Options as HTMLMinifyOptions,
@@ -12,7 +12,6 @@ const DIST_DIR: string = path.resolve(productionPath);
 
 function getFilesRecursively(dir: string): string[] {
   let results: string[] = [];
-
   if (!fs.existsSync(dir)) return results;
 
   const list = fs.readdirSync(dir);
@@ -40,35 +39,41 @@ async function minifySite(): Promise<void> {
   try {
     for (const filePath of allFiles) {
       const ext = path.extname(filePath).toLowerCase();
-      const originalCode = fs.readFileSync(filePath, "utf8");
 
       if (ext === ".js") {
-        const jsOptions: MinifyOptions = {
-          mangle: true,
-          compress: true,
-        };
+        const originalCode = fs.readFileSync(filePath, "utf8");
+        const jsOptions: MinifyOptions = { mangle: true, compress: true };
         const jsResult = await minifyJS(originalCode, jsOptions);
         if (jsResult.code) {
           fs.writeFileSync(filePath, jsResult.code);
           jsCount++;
         }
       } else if (ext === ".css") {
-        const cssResult = new CleanCSS({ level: 2, inline: false }).minify(
-          originalCode,
-        );
-        if (cssResult.errors.length > 0) {
-          throw new Error(
-            `CSS Error in ${filePath}: ${cssResult.errors.join("\n")}`,
-          );
-        }
-        fs.writeFileSync(filePath, cssResult.styles);
+        // 2. Optimized CSS using LightningCSS (Natively compiles & minifies nested blocks)
+        const cssResult = lightningcss.transform({
+          filename: filePath,
+          code: fs.readFileSync(filePath), // Pass buffer directly
+          minify: true,
+          sourceMap: false,
+        });
+
+        fs.writeFileSync(filePath, cssResult.code);
         cssCount++;
       } else if (ext === ".html" || ext === ".htm") {
+        const originalCode = fs.readFileSync(filePath, "utf8");
         const htmlOptions: HTMLMinifyOptions = {
           collapseWhitespace: true,
           removeComments: true,
           minifyJS: true,
-          minifyCSS: true,
+          minifyCSS: (text) => {
+            return lightningcss
+              .transform({
+                filename: "inline.css",
+                code: Buffer.from(text),
+                minify: true,
+              })
+              .code.toString();
+          },
         };
         const htmlResult = await minifyHTML(originalCode, htmlOptions);
         fs.writeFileSync(filePath, htmlResult);

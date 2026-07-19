@@ -34,8 +34,6 @@
     "@types/html-minifier-terser": "^7.0.2",
     "@types/live-server": "^1.2.3",
     "@types/node": "^25.9.4",
-    "@types/ssh2-sftp-client": "^9.0.6",
-    "clean-css": "^5.3.3",
     "html-minifier-terser": "^7.2.0",
     "husky": "^9.1.7",
     "live-server": "^1.2.2",
@@ -46,14 +44,15 @@
   "dependencies": {
     "cspell": "^10.0.1",
     "html-validate": "^11.5.5",
+    "lightningcss": "^1.32.0",
     "shiki": "^4.3.1"
-  },
-  "allowScripts": {
-    "fsevents@1.2.13": true
   },
   "overrides": {
     "braces": "^3.0.3",
     "micromatch": "^4.0.8",
     "uuid": "^11.1.1"
+  },
+  "allowScripts": {
+    "fsevents@1.2.13": true
   }
 }
