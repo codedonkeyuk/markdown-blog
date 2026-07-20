@@ -14,28 +14,27 @@ Selfishly I like drawing SVG's, I not only find it easy but also very satisfying
 
 This project is very big and convoluted. I suspect ill break the templating logic into a separate project in the future. Run it like babel, or web pack. For now there is a we bit of a learning curve, sorry!
 
-| Path.                       | Description                                                                                                                                                                           |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/assets/site`              | This is the static site that the blog is built from. When you run `serve-dev` you are serving this directory. Blog content can only be seen in `dist` and is served from `serve-prod` |
-| `/tmp/blog-content`         | This is where the blog contentlives. Each subdirectory is a new blog entry. After you run create post you edidt the various files in here                                             |
-| `/tmp/site`                 | Directory into which the static site is generated. You can also test this locally via `npm run serveProd`                                                                             |
-| `/src`                      | Source code of the project written in typescript                                                                                                                                      |
-| `/dist`                     | Javascript used in module generated from src                                                                                                                                          |
+| Path.               | Description                                                                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/assets/site`      | This is the static site that the blog is built from. When you run `serve-dev` you are serving this directory. Blog content can only be seen in `dist` and is served from `serve-prod` |
+| `/tmp/blog-content` | This is where the blog contentlives. Each subdirectory is a new blog entry. After you run create post you edidt the various files in here                                             |
+| `/tmp/site`         | Directory into which the static site is generated. You can also test this locally via `npm run serveProd`                                                                             |
+| `/src`              | Source code of the project written in typescript                                                                                                                                      |
+| `/dist`             | Javascript used in module generated from src                                                                                                                                          |
 
-  "siteSourcePath": "./assets/site",
-  "postSourcePath": "./tmp/blog-content",
-  "productionPath": "./tmp/site"
+"siteSourcePath": "./assets/site",
+"postSourcePath": "./tmp/blog-content",
+"productionPath": "./tmp/site"
 
 ## Commands
 
-| Command              | Description                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `npm run validate`   | Uses prettier to validate project                                                                                   |
-| `npm run clean`      | Applies prettier to project (can't build project unless cleaned)                                                    |
-| `npm run build`      | builds the project in dist directory.                                                                               |
-| `npm run test`       | Runs the tests found in the src/code                                                                                |
-| `npm run coverage`   | Runs coverage report                                                                                                |
-
+| Command            | Description                                                      |
+| ------------------ | ---------------------------------------------------------------- |
+| `npm run validate` | Uses prettier to validate project                                |
+| `npm run clean`    | Applies prettier to project (can't build project unless cleaned) |
+| `npm run build`    | builds the project in dist directory.                            |
+| `npm run test`     | Runs the tests found in the src/code                             |
+| `npm run coverage` | Runs coverage report                                             |
 
 # Tool instructions (For website creators)
 
@@ -52,6 +51,7 @@ I also wrote this on MAC, support is offered for windows but I never tested it d
 ### Add Config file to you project
 
 You need to create a `blog-config.json` file in the root of your project.
+
 ```json
 {
   "siteSourcePath": "./src/site",   # your html files live here
@@ -60,23 +60,24 @@ You need to create a `blog-config.json` file in the root of your project.
 }
 ```
 
-### Copy HTML 
+### Copy HTML
 
-To get started quickly on a fresh project, copy the template [./assets/site](./assets/site) into you project. 
+To get started quickly on a fresh project, copy the template [./assets/site](./assets/site) into you project.
 
 If you have an existing project, copy tags found in [./assets/site/blog/page1.html](./assets/site/blog/page1.html) & [assets/site/blog/post/post.html](assets/site/blog/post/post.html) into your project. The tags look like the following, each has a opening and close tag.
 
 ```html
-    <!--INJECT-META-OG-URL-START--><!--INJECT-META-OG-URL-END-->
+<!--INJECT-META-OG-URL-START--><!--INJECT-META-OG-URL-END-->
 ```
 
 ### Setup
+
 ```bash
 npm install   #install dependencies
-npm run build #build the project 
+npm run build #build the project
 npm link      # create global link, project commands are now available everywhere.
 
-npm link PROJECT-NAME # Link to a single project 
+npm link PROJECT-NAME # Link to a single project
 
 create-post # create a post entry
 build-blog # build the blog
@@ -84,15 +85,14 @@ build-blog # build the blog
 
 ### Commands available for site development
 
-| Command              | Description                                                                                                          |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `build-blog`         | builds the blog from bog enteries                                                                                    |
-| `create-post`        | creates a blog post                                                                                                  |
-| `serve-dev`          | serves the static site without posts, which has live reload enabled                                                  |
-| `serve-prod`         | serves the production site with posts                                                                                |
-| `html-validate-dev`  | validate dev site html                                                                                               |
-| `html-validate-prod` | validate production site html                                                                                        |
-
+| Command              | Description                                                         |
+| -------------------- | ------------------------------------------------------------------- |
+| `build-blog`         | builds the blog from bog enteries                                   |
+| `create-post`        | creates a blog post                                                 |
+| `serve-dev`          | serves the static site without posts, which has live reload enabled |
+| `serve-prod`         | serves the production site with posts                               |
+| `html-validate-dev`  | validate dev site html                                              |
+| `html-validate-prod` | validate production site html                                       |
 
 ### Serve Site
 
