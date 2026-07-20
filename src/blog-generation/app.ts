@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import generatePostPages from "./template/generate-post-pages.ts";
 import generateIndexes from "./template/generate-indexes.ts";
 import deleteDirContents from "./file-utils/delete-dir-contents.ts";

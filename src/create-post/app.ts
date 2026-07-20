@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import appConfig from "../app-config.ts";
 import createDir from "../blog-generation/file-utils/create-dir.ts";
 import createFile from "../blog-generation/file-utils/create-file.ts";
@@ -91,7 +93,8 @@ process.stdin.on("data", async (data) => {
       pageDescription: "A new post",
       postThumbDescription: "A new post",
       pageImageDescription: "A new post",
-      author: "Lee G",
+      author: "Joe Bloggs",
+      publish: true,
     },
     null,
     2,

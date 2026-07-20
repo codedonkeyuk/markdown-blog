@@ -26,7 +26,7 @@ describe("Test html-validate-prod.ts", async () => {
     await import("./html-validate-prod.ts");
     assert.strictEqual(htmlValidateMock.mock.callCount(), 1);
     assert.deepStrictEqual(htmlValidateMock.mock.calls[0].arguments, [
-      "./test-site",
+      "./tmp/site",
       {
         "attr-case": "off",
         "attr-quotes": "off",

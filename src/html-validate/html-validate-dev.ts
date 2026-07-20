@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import htmlValidate from "./html-validate.ts";
 import appConfig from "../app-config.ts";
 

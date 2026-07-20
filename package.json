@@ -14,29 +14,35 @@
   "private": "true",
   "author": "Leigh G",
   "type": "module",
-  "main": "index.js",
+  "bin": {
+    "build-blog": "./dist/blog-generation/app.js",
+    "create-post": "./dist/create-post/app.js",
+    "html-validate-dev": "./dist/html-validate/html-validate-dev.js",
+    "html-validate-prod": "./dist/html-validate/html-validate-prod.js",
+    "serve-dev": "./dist/serve-site/serve-dev.js",
+    "serve-prod": "./dist/serve-site/serve-prod.js"
+  },
   "scripts": {
     "validate": "node src/html-validate/html-validate-dev.ts && prettier . --check && tsc --noEmit",
     "clean": "prettier . --write",
-    "createPost": "node src/create-post/app.ts",
-    "prebuild": "npm run validate",
-    "build": "node src/blog-generation/app.ts && node src/html-validate/html-validate-prod.ts",
+    "build": "tsc -p tsconfig.build.json",
     "serveDev": "node src/serve-site/app.ts ./assets/site",
     "serveProd": "node src/serve-site/app.ts ./test-site",
-    "test": "node --test --experimental-test-module-mocks \"**/*.test.ts\"",
+    "test": "node --test --experimental-strip-types --experimental-test-module-mocks \"**/*.test.ts\"",
+    "coverage": "node --experimental-strip-types --experimental-test-module-mocks --test --experimental-test-coverage \"**/*.test.ts\"",
     "prepare": "husky"
   },
   "devDependencies": {
     "@types/clean-css": "^4.2.11",
     "@types/html-minifier-terser": "^7.0.2",
     "@types/live-server": "^1.2.3",
-    "@types/node": "^25.9.4",
+    "@types/node": "^26.1.1",
     "html-minifier-terser": "^7.2.0",
     "husky": "^9.1.7",
     "live-server": "^1.2.2",
-    "prettier": "3.8.1",
+    "prettier": "3.9.5",
     "terser": "^5.49.0",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "cspell": "^10.0.1",
