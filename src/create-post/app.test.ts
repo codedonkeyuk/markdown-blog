@@ -55,5 +55,5 @@ test("Unit Test: app.ts captures stdin and executes file creators", async (t) =>
 
   assert.strictEqual(metadata.name, "My New Test Blog Post");
   assert.strictEqual(metadata.nameSlug, "my-new-test-blog-post");
-  assert.strictEqual(metadata.author, "Lee G");
+  assert.strictEqual(metadata.author, "Joe Bloggs");
 });
