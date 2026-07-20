@@ -26,8 +26,6 @@
     "validate": "node src/html-validate/html-validate-dev.ts && prettier . --check && tsc --noEmit",
     "clean": "prettier . --write",
     "build": "tsc -p tsconfig.build.json",
-    "serveDev": "node src/serve-site/app.ts ./assets/site",
-    "serveProd": "node src/serve-site/app.ts ./test-site",
     "test": "node --test --experimental-strip-types --experimental-test-module-mocks \"**/*.test.ts\"",
     "coverage": "node --experimental-strip-types --experimental-test-module-mocks --test --experimental-test-coverage \"**/*.test.ts\"",
     "prepare": "husky"
