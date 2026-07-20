@@ -13,6 +13,9 @@ const ogBlogConfig = {
   siteAddress: "http://localhost:3001",
   rssDescription: "A web developers portfolio and blog.",
   rssPostLimit: 20,
+  serviceWorker: {
+    precacheAssets: [],
+  },
 };
 
 export default function appConfig() {

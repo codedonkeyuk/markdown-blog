@@ -16,40 +16,357 @@ const PAGE_THUMBNAIL_TEMPLATE = `
 `;
 
 const POST_IMAGE_TEMPLATE = `
-<svg width="1200" height="200" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <g id="smiley">
-            <circle cx="50" cy="50" r="40" fill="#ffcc00" />
-            <circle cx="35" cy="40" r="5" fill="#000" />
-            <circle cx="65" cy="40" r="5" fill="#000" />
-            <path d="M30 60 Q50 80, 70 60" stroke="#000" stroke-width="3" fill="none" />
-        </g>
-    </defs>
-    <use href="#smiley" x="0" y="0" />
-    <use href="#smiley" x="100" y="0" />
-    <use href="#smiley" x="200" y="0" />
-    <use href="#smiley" x="300" y="0" />
-    <use href="#smiley" x="400" y="0" />
-    <use href="#smiley" x="500" y="0" />
-    <use href="#smiley" x="600" y="0" />
-    <use href="#smiley" x="700" y="0" />
-    <use href="#smiley" x="800" y="0" />
-    <use href="#smiley" x="900" y="0" />
-    <use href="#smiley" x="1000" y="0" />
-    <use href="#smiley" x="1100" y="0" />
-    <use href="#smiley" x="0" y="100" />
-    <use href="#smiley" x="100" y="100" />
-    <use href="#smiley" x="200" y="100" />
-    <use href="#smiley" x="300" y="100" />
-    <use href="#smiley" x="400" y="100" />
-    <use href="#smiley" x="500" y="100" />
-    <use href="#smiley" x="600" y="100" />
-    <use href="#smiley" x="700" y="100" />
-    <use href="#smiley" x="800" y="100" />
-    <use href="#smiley" x="900" y="100" />
-    <use href="#smiley" x="1000" y="100" />
-    <use href="#smiley" x="1100" y="100" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1227"
+   height="400"
+   viewBox="0 0 1227 400"
+   version="1.1"
+   id="svg26"
+   sodipodi:docname="post-image.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview26"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.73333333"
+     inkscape:cx="484.09091"
+     inkscape:cy="356.59091"
+     inkscape:window-width="1946"
+     inkscape:window-height="1186"
+     inkscape:window-x="298"
+     inkscape:window-y="49"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg26" />
+  <defs
+     id="defs3">
+    <g
+       id="smiley">
+      <circle
+         cx="50"
+         cy="50"
+         r="40"
+         fill="#ffcc00"
+         id="circle1" />
+      <circle
+         cx="35"
+         cy="40"
+         r="5"
+         fill="#000000"
+         id="circle2" />
+      <circle
+         cx="65"
+         cy="40"
+         r="5"
+         fill="#000000"
+         id="circle3" />
+      <path
+         d="m 30,60 q 20,20 40,0"
+         stroke="#000000"
+         stroke-width="3"
+         fill="none"
+         id="path3" />
+    </g>
+  </defs>
+  <use
+     href="#smiley"
+     x="0"
+     y="0"
+     id="use3"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="100"
+     y="0"
+     id="use4"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="200"
+     y="0"
+     id="use5"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="300"
+     y="0"
+     id="use6"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="400"
+     y="0"
+     id="use7"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="500"
+     y="0"
+     id="use8"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="600"
+     y="0"
+     id="use9"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="700"
+     y="0"
+     id="use10"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="800"
+     y="0"
+     id="use11"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="900"
+     y="0"
+     id="use12"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="1000"
+     y="0"
+     id="use13"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="1100"
+     y="0"
+     id="use14"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="0"
+     y="100"
+     id="use15"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="100"
+     y="100"
+     id="use16"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="200"
+     y="100"
+     id="use17"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="300"
+     y="100"
+     id="use18"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="400"
+     y="100"
+     id="use19"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="500"
+     y="100"
+     id="use20"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="600"
+     y="100"
+     id="use21"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="700"
+     y="100"
+     id="use22"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="800"
+     y="100"
+     id="use23"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="900"
+     y="100"
+     id="use24"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="1000"
+     y="100"
+     id="use25"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="1100"
+     y="100"
+     id="use26"
+     transform="translate(10.909091,-2.7272727)" />
+  <use
+     href="#smiley"
+     x="0"
+     y="0"
+     id="use3-3"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="100"
+     y="0"
+     id="use4-9"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="200"
+     y="0"
+     id="use5-8"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="300"
+     y="0"
+     id="use6-6"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="400"
+     y="0"
+     id="use7-5"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="500"
+     y="0"
+     id="use8-7"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="600"
+     y="0"
+     id="use9-6"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="700"
+     y="0"
+     id="use10-2"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="800"
+     y="0"
+     id="use11-7"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="900"
+     y="0"
+     id="use12-0"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="1000"
+     y="0"
+     id="use13-3"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="1100"
+     y="0"
+     id="use14-9"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="0"
+     y="100"
+     id="use15-9"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="100"
+     y="100"
+     id="use16-9"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="200"
+     y="100"
+     id="use17-1"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="300"
+     y="100"
+     id="use18-7"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="400"
+     y="100"
+     id="use19-2"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="500"
+     y="100"
+     id="use20-3"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="600"
+     y="100"
+     id="use21-6"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="700"
+     y="100"
+     id="use22-5"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="800"
+     y="100"
+     id="use23-5"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="900"
+     y="100"
+     id="use24-8"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="1000"
+     y="100"
+     id="use25-1"
+     transform="translate(11.363636,199.63637)" />
+  <use
+     href="#smiley"
+     x="1100"
+     y="100"
+     id="use26-4"
+     transform="translate(11.363636,199.63637)" />
 </svg>
+
 `;
 
 process.stdin.resume();

@@ -68,6 +68,8 @@ describe("Test create-index-page.ts", async () => {
     ];
     const result = testee.default(pageTemplate, posts, 0, 1);
 
+    console.log(result);
+
     assert(
       result.includes(
         '<meta property="og:url" content="http://localhost:3001/post/page1" />',
@@ -92,7 +94,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50"\s+class="post__small-image">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post__large-image"\s+alt="Post one thumbnail description">\s*<\/picture>/,
+      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post-index__article-img"\s+alt="Post one thumbnail description">\s*<\/picture>/,
     );
     assert(result.includes("<h2>Post 1</h2>"));
     assert(result.includes("Post one page description"));
@@ -100,7 +102,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50"\s+class="post__small-image">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post__large-image"\s+alt="Post two thumbnail description">\s*<\/picture>/,
+      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post-index__article-img"\s+alt="Post two thumbnail description">\s*<\/picture>/,
     );
     assert(result.includes("<h2>Post 2</h2>"));
     assert(result.includes("Post two page description"));

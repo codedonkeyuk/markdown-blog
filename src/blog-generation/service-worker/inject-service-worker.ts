@@ -1,30 +1,6 @@
 import createFile from "../file-utils/create-file.ts";
 import appConfig from "../../app-config.ts";
 
-const PRECACHE_ASSETS = [
-  "/",
-  "/index",
-  "/portfolio-single-page-apps",
-  "/portfolio-js-projects",
-  "/portfolio-cursed",
-  "/offline.html",
-  "/images/logo.svg",
-  "/images/logo-square.svg",
-  "/css/fonts/inter-latin-400-normal.woff2",
-  "/css/fonts/inter-latin-400-italic.woff2",
-  "/css/reset.css",
-  "/css/container.css",
-  "/css/page.css",
-  "/css/navigation.css",
-  "/css/footer.css",
-  "/css/main.css",
-  "/js/lib/three/three.core.js",
-  "/js/lib/three/three.webgpu.js",
-  "/js/web-worker/background-standard-worker.js",
-  "/js/web-worker/background-cursed-worker.js",
-  "/js/app.js",
-];
-
 const generateAssetHash = (assets: string[]): number => {
   const str = assets.join(",");
   let hash = 0;
@@ -116,12 +92,15 @@ self.addEventListener("fetch", (event) => {
 `;
 
 const injectServiceWorker = async () => {
-  const { productionPath } = appConfig();
-  const versionNo = generateAssetHash(PRECACHE_ASSETS);
+  const {
+    productionPath,
+    serviceWorker: { precacheAssets },
+  } = appConfig();
+  const versionNo = generateAssetHash(precacheAssets);
 
   return createFile(
     `${productionPath}/sw.js`,
-    serviceWorkerContent(versionNo, PRECACHE_ASSETS),
+    serviceWorkerContent(versionNo, precacheAssets),
   );
 };
 
