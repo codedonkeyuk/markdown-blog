@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import { pathToFileURL } from "url";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 import appConfig from "../app-config.ts";
 
-const { productionPath } = appConfig();
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const { productionPath } = appConfig();
 process.argv.push(productionPath);
 
-const appPath = resolve(process.cwd(), "dist/serve-site/app.js");
+const projectRoot = resolve(__dirname, "../../");
+const appPath = resolve(projectRoot, "dist/serve-site/app.js");
 
 await import(pathToFileURL(appPath).href);
