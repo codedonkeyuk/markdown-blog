@@ -1,1 +1,5 @@
-{}
+{
+  "siteSourcePath": "./assets/site",
+  "postSourcePath": "./assets/blog-content",
+  "productionPath": "./test-site"
+}

@@ -11,5 +11,5 @@
     "declaration": true,
     "skipLibCheck": true
   },
-  "include": ["src/code/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }

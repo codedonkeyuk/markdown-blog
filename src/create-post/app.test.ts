@@ -44,7 +44,7 @@ test("Unit Test: app.ts captures stdin and executes file creators", async (t) =>
   assert.strictEqual(mockStdin.pause.mock.calls.length, 1);
   assert.match(
     mockCreatedDir,
-    /^\.\/src\/blog-content\/\d+_my-new-test-blog-post$/,
+    /^\.\/assets\/blog-content\/\d+_my-new-test-blog-post$/,
   );
 
   const filenames = Object.keys(mockCreatedFiles);

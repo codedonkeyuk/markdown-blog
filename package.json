@@ -16,18 +16,15 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "validate": "node src/code/html-validate/html-validate-dev.ts && prettier . --check && tsc --noEmit",
+    "validate": "node src/html-validate/html-validate-dev.ts && prettier . --check && tsc --noEmit",
     "clean": "prettier . --write",
-    "createPost": "node src/code/create-post/app.ts",
-    "deleteDist": "node src/code/delete-dist/app.ts",
+    "createPost": "node src/create-post/app.ts",
     "prebuild": "npm run validate",
-    "build": "node src/code/blog-generation/app.ts && node src/code/html-validate/html-validate-prod.ts",
-    "serveDev": "node src/code/serve-site/app.ts",
-    "serveProd": "node src/code/serve-site/app.ts ./dist",
+    "build": "node src/blog-generation/app.ts && node src/html-validate/html-validate-prod.ts",
+    "serveDev": "node src/serve-site/app.ts ./assets/site",
+    "serveProd": "node src/serve-site/app.ts ./test-site",
     "test": "node --test --experimental-test-module-mocks \"**/*.test.ts\"",
-    "prepare": "husky",
-    "deploySubmodule": "npm run build && test -f dist/index.html && cd dist && git checkout main && git add -A && git commit -m \"Site update: $(date +'%Y-%m-%d %H:%M:%S')\" && git push origin main",
-    "deploySite": "npm run build && node src/code/deploy-site/app.ts"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/clean-css": "^4.2.11",

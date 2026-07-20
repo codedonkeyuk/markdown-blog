@@ -1,5 +1,8 @@
+import appConfig from "../app-config.ts";
 import createDir from "../blog-generation/file-utils/create-dir.ts";
 import createFile from "../blog-generation/file-utils/create-file.ts";
+
+const { postSourcePath } = appConfig();
 
 const PAGE_THUMBNAIL_TEMPLATE = `
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +63,7 @@ process.stdin.on("data", async (data) => {
   const now = new Date();
   const creationTimestamp = now.getTime();
 
-  const postPath = `./src/blog-content/${creationTimestamp}_${nameSlug}`;
+  const postPath = `${postSourcePath}/${creationTimestamp}_${nameSlug}`;
 
   const creationDate = now.toLocaleDateString("en-GB", {
     weekday: "long",
