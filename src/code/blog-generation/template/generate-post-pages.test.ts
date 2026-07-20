@@ -26,6 +26,9 @@ describe("Test generate-post-pages.ts", async () => {
       output: string,
     ) => Promise<{ success: boolean; path: string }>
   >;
+  const appConfigMock = mock.fn() as Mock<
+    (path: string) => Record<string, any>
+  >;
 
   let readFileContext: any;
   let createDirContext: any;
@@ -79,13 +82,15 @@ describe("Test generate-post-pages.ts", async () => {
       defaultExport: convertSvgToPngMock,
     });
     appConfigContext = mock.module("../../app-config.ts", {
-      namedExports: {
-        postSourcePath: "./src/blog/post",
-        blogProductionPath: "./dist/blog",
-        postPageTemplate: "./src/blog/post/post.html",
-        maxParallelProcesses: 50,
-      },
+      defaultExport: appConfigMock,
     });
+
+    appConfigMock.mock.mockImplementation((path: string) => ({
+      postSourcePath: "./src/blog/post",
+      blogProductionPath: "./dist/blog",
+      postPageTemplate: "./src/blog/post/post.html",
+      maxParallelProcesses: 50,
+    }));
   });
 
   afterEach(() => {

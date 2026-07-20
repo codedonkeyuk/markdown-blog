@@ -1,6 +1,6 @@
 import { type PostInfo } from "../types.ts";
 import templateParameterRegex from "./template-parameter-regex.ts";
-import { siteAddress, siteTitle } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 
 const createIndexPage = (
   pageTemplate: string,
@@ -8,6 +8,7 @@ const createIndexPage = (
   pageNo: number,
   maxPage: number,
 ): string => {
+  const { siteTitle, siteAddress } = appConfig();
   const pageNumber = pageNo + 1;
   const title = `${siteTitle} - Blog - Page ${pageNumber}`;
   const description = `List of Posts Page ${pageNumber}`;

@@ -3,15 +3,13 @@ import generateIndexes from "./template/generate-indexes.ts";
 import deleteDirContents from "./file-utils/delete-dir-contents.ts";
 import copyFolderContents from "./file-utils/copy-folder-contents.ts";
 import generatePostInfo from "./template/generate-post-info.ts";
-import {
-  productionPath,
-  siteSourcePath,
-  blogProductionPath,
-} from "../app-config.ts";
+import appConfig from "../app-config.ts";
 import minifySite from "./compression/minify-site.ts";
 import injectServiceWorker from "./service-worker/inject-service-worker.ts";
 import rssFeed from "./rss/rss-feed.ts";
 import { spellCheck } from "./validate/spell-check.ts";
+
+const { productionPath, siteSourcePath, blogProductionPath } = appConfig();
 
 await deleteDirContents(productionPath);
 await copyFolderContents(siteSourcePath, productionPath);

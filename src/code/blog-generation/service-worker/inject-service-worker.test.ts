@@ -1,16 +1,26 @@
 import { test, mock, afterEach, describe } from "node:test";
 import assert from "node:assert";
 
+// 1. Maintain a configurable state dictionary for appConfig
+const mockConfig = {
+  productionPath: "/mock/prod/path",
+};
+
+// 2. Mock app-config.ts using absolute URLs and the non-deprecated exports format
+mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+  exports: {
+    default: () => mockConfig,
+  },
+});
+
 const mockCreateFile = mock.fn(async (path: string, content: string) => {
   return Promise.resolve();
 });
 
-mock.module("../file-utils/create-file.ts", {
-  namedExports: { default: mockCreateFile },
-});
-mock.module("../../app-config.ts", {
-  namedExports: {
-    productionPath: "/mock/prod/path",
+// 3. Mock create-file.ts using the clean default exports configuration mapping
+mock.module(new URL("../file-utils/create-file.ts", import.meta.url).href, {
+  exports: {
+    default: mockCreateFile,
   },
 });
 
@@ -32,6 +42,7 @@ describe("Test app.ts", () => {
     const targetPath = firstCall.arguments[0];
     const generatedContent = firstCall.arguments[1];
 
+    // This assertion will now pass perfectly!
     assert.strictEqual(targetPath, "/mock/prod/path/sw.js");
 
     assert.match(generatedContent, /const CACHE_NAME = "site-assets-v\d+";/);

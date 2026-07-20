@@ -1,6 +1,6 @@
 import { type PostInfo } from "../types.ts";
 import markdownHtmlConvertor from "../markdown/markdown_html_convertor.ts";
-import { siteTitle, siteAddress, blogPath } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 import templateParameterRegex from "./template-parameter-regex.ts";
 
 const createPostPage = async (
@@ -8,6 +8,7 @@ const createPostPage = async (
   postContent: string,
   postInfo: PostInfo,
 ): Promise<string> => {
+  const { siteAddress, blogPath, siteTitle } = appConfig();
   const baseDirectory = `${siteAddress}/${blogPath}/${postInfo.dateDirectory}/`;
 
   const renderedPostHtml = await markdownHtmlConvertor(postContent);

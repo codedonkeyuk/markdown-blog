@@ -2,13 +2,11 @@ import readFile from "../file-utils/read-file.ts";
 import { type PostInfo } from "../types.ts";
 import createFile from "../file-utils/create-file.ts";
 import createIndexPage from "./create-index-page.ts";
-import {
-  blogProductionPath,
-  blogIndexPageTemplate,
-  postsPerPage,
-} from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 
 const generateIndexes = async (posts: PostInfo[]) => {
+  const { blogProductionPath, blogIndexPageTemplate, postsPerPage } =
+    appConfig();
   posts.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 
   const pageTemplate = await readFile(blogIndexPageTemplate);

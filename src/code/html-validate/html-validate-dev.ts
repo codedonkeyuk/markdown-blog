@@ -1,5 +1,7 @@
 import htmlValidate from "./html-validate.ts";
-import { siteSourcePath } from "../app-config.ts";
+import appConfig from "../app-config.ts";
+
+const { siteSourcePath } = appConfig();
 
 await htmlValidate(siteSourcePath, {
   "doctype-style": "off",

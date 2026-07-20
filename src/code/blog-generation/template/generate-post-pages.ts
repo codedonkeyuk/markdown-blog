@@ -6,15 +6,16 @@ import readFile from "../file-utils/read-file.ts";
 import createPostPage from "../template/create-post-page.ts";
 import asyncPool from "../thread-management/async-pool.ts";
 import { type PostInfo } from "../types.ts";
-import {
-  postSourcePath,
-  blogProductionPath,
-  postPageTemplate,
-  maxParallelProcesses,
-} from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 import convertSvgToPng from "../image/convert-svg-to-png.ts";
 
 const generatePostPages = async (postInfo: PostInfo[]): Promise<void> => {
+  const {
+    postSourcePath,
+    blogProductionPath,
+    postPageTemplate,
+    maxParallelProcesses,
+  } = appConfig();
   const postTemplate = await readFile(postPageTemplate);
 
   await asyncPool(postInfo, maxParallelProcesses, async (post) => {

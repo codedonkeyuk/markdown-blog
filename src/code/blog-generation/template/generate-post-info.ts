@@ -1,15 +1,12 @@
 import readDirectories from "../file-utils/read-directories.ts";
 import { type PostInfo, type PostInfoJson } from "../types.ts";
-import {
-  blogProductionPath,
-  postSourcePath,
-  blogPath,
-  maxParallelProcesses,
-} from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 import asyncPool from "../thread-management/async-pool.ts";
 import readFile from "../file-utils/read-file.ts";
 
 const generatePostInfo = async (): Promise<PostInfo[]> => {
+  const { blogProductionPath, postSourcePath, blogPath, maxParallelProcesses } =
+    appConfig();
   const directories = await readDirectories(postSourcePath);
 
   const allRawPosts = await asyncPool(

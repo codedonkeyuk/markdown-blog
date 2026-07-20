@@ -13,20 +13,30 @@ const mockAsyncPool = mock.fn(
 
 // 2. Wrap mock configurations and function loading inside an async setup routine
 async function initializeMocks() {
+  // Fixed deprecation structure: namedExports converted to exports
   mock.module("cspell-lib", {
-    namedExports: {
+    exports: {
       spellCheckDocument: mockSpellCheckDocument,
     },
   });
 
-  mock.module("../thread-management/async-pool.ts", {
-    defaultExport: mockAsyncPool,
-  });
+  // Fixed deprecation structure: defaultExport converted to exports.default
+  mock.module(
+    new URL("../thread-management/async-pool.ts", import.meta.url).href,
+    {
+      exports: {
+        default: mockAsyncPool,
+      },
+    },
+  );
 
-  mock.module("../../app-config.ts", {
-    namedExports: {
-      postSourcePath: "/mock/posts",
-      maxParallelProcesses: 4,
+  // Fixed import issue: changed from named constants to a default config function export
+  mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+    exports: {
+      default: () => ({
+        postSourcePath: "/mock/posts",
+        maxParallelProcesses: 4,
+      }),
     },
   });
 

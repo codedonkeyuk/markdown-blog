@@ -1,21 +1,49 @@
-export const siteSourcePath = "./src/site";
-export const postSourcePath = "./src/blog-content";
-export const productionPath = "./dist";
+import fs from "node:fs";
+import path from "node:path";
 
-export const blogProductionPath = `${productionPath}/blog`;
+const ogBlogConfig = {
+  siteSourcePath: "./src/site",
+  postSourcePath: "./src/blog-content",
+  productionPath: "./dist",
+  postsPerPage: 20,
+  blogPath: "blog",
+  maxParallelProcesses: 24,
+  maxCompresionProcesses: 4,
+  siteTitle: "Markdown Blog",
+  siteAddress: "http://localhost:3001",
+  rssDescription: "A web developers portfolio and blog.",
+  rssPostLimit: 20,
+};
 
-export const blogIndexPageTemplate = `${siteSourcePath}/blog/page1.html`;
-export const postPageTemplate = `${siteSourcePath}/blog/post/post.html`;
+export default function appConfig() {
+  let userConfig: Record<string, any> = {};
 
-export const postsPerPage = 20;
+  const rootDir = process.cwd();
+  const configPath = path.join(rootDir, "blog-config.json");
 
-export const blogPath = "blog";
+  try {
+    if (fs.existsSync(configPath)) {
+      const fileContent = fs.readFileSync(configPath, "utf8");
+      userConfig = JSON.parse(fileContent);
+    } else {
+      console.warn(
+        "⚠️  blog-config.json not found in application root. Using default configurations.",
+      );
+    }
+  } catch (error) {
+    console.error("❌ Failed to parse blog-config.json. Checking file syntax.");
+    throw error;
+  }
 
-export const maxParallelProcesses = 24;
-export const maxCompresionProcesses = 4;
+  const mrgConfig = {
+    ...ogBlogConfig,
+    ...userConfig,
+  };
 
-export const siteTitle = "Markdown Blog";
-export const siteAddress = "http://localhost:3001";
-
-export const rssDescription = "A web developers portfolio and blog.";
-export const rssPostLimit = 20;
+  return {
+    ...mrgConfig,
+    blogProductionPath: `${mrgConfig.productionPath}/blog`,
+    blogIndexPageTemplate: `${mrgConfig.siteSourcePath}/blog/page1.html`,
+    postPageTemplate: `${mrgConfig.siteSourcePath}/blog/post/post.html`,
+  };
+}

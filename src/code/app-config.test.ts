@@ -1,37 +1,86 @@
-import { describe, test } from "node:test";
 import assert from "node:assert";
-import * as testee from "./app-config.ts";
+import { afterEach, before, describe, mock, test } from "node:test";
+import fs from "node:fs";
+import getConfig from "./app-config.ts";
 
-describe("Test app-config.ts", () => {
-  test("Count exported attributes, confirm each returns correct paramater", () => {
-    assert.strictEqual(Object.keys(testee).length, 14);
+describe("Configuration Tests", () => {
+  let mockFileExists = true;
+  let mockFileContent = "{}";
 
-    assert.strictEqual(testee.siteSourcePath, "./src/site");
-    assert.strictEqual(testee.productionPath, "./dist");
-    assert.strictEqual(testee.blogProductionPath, "./dist/blog");
-    assert.strictEqual(testee.postSourcePath, "./src/blog-content");
-    assert.strictEqual(testee.siteTitle, "Markdown Blog");
-    assert.strictEqual(testee.siteAddress, "http://localhost:3001");
+  // 1. Stub the standard native filesystem methods once for the suite
+  before(() => {
+    mock.method(fs, "existsSync", () => mockFileExists);
+    mock.method(fs, "readFileSync", () => mockFileContent);
+  });
+
+  // 2. Reset the states back to default before every single test
+  afterEach(() => {
+    mockFileExists = true;
+    mockFileContent = "{}";
+  });
+
+  test("Configuration object contains all required base properties", () => {
+    const config = getConfig();
+    assert.ok(config, "The configuration object is undefined.");
+
+    const expectedKeys = [
+      "siteSourcePath",
+      "postSourcePath",
+      "productionPath",
+      "postsPerPage",
+      "blogPath",
+      "maxParallelProcesses",
+      "maxCompresionProcesses",
+      "siteTitle",
+      "siteAddress",
+      "rssDescription",
+      "rssPostLimit",
+    ] as const;
+
+    for (const key of expectedKeys) {
+      assert.ok(
+        config[key] !== undefined,
+        `Property ${key} is missing from configuration`,
+      );
+    }
+  });
+
+  test("Configuration object contains correctly derived path properties", () => {
+    const config = getConfig();
+
     assert.strictEqual(
-      testee.rssDescription,
-      "A web developers portfolio and blog.",
+      config.blogProductionPath,
+      `${config.productionPath}/blog`,
     );
     assert.strictEqual(
-      testee.rssDescription,
-      "A web developers portfolio and blog.",
+      config.blogIndexPageTemplate,
+      `${config.siteSourcePath}/blog/page1.html`,
     );
     assert.strictEqual(
-      testee.blogIndexPageTemplate,
-      "./src/site/blog/page1.html",
+      config.postPageTemplate,
+      `${config.siteSourcePath}/blog/post/post.html`,
     );
-    assert.strictEqual(
-      testee.postPageTemplate,
-      "./src/site/blog/post/post.html",
-    );
-    assert.strictEqual(testee.postsPerPage, 20);
-    assert.strictEqual(testee.rssPostLimit, 20);
-    assert.strictEqual(testee.blogPath, "blog");
-    assert.strictEqual(testee.maxParallelProcesses, 24);
-    assert.strictEqual(testee.maxCompresionProcesses, 4);
+  });
+
+  test("Configuration values can be custom mocked per test", () => {
+    // 3. Simply update your variables right in the test body!
+    mockFileContent = JSON.stringify({
+      siteTitle: "Moo",
+      postsPerPage: 99,
+    });
+
+    const config = getConfig();
+
+    assert.strictEqual(config.siteTitle, "Moo");
+    assert.strictEqual(config.postsPerPage, 99);
+  });
+
+  test("Falls back to defaults gracefully if file does not exist", () => {
+    mockFileExists = false;
+
+    const config = getConfig();
+
+    // Should fall back to the ogBlogConfig internal value
+    assert.strictEqual(config.siteTitle, "Markdown Blog");
   });
 });

@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 import asyncPool from "../thread-management/async-pool.ts";
-import { maxParallelProcesses } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 
 interface CopyTask {
   srcPath: string;
@@ -36,6 +36,8 @@ async function copyFolderContents(src: string, dest: string): Promise<void> {
   await fs.mkdir(dest, { recursive: true });
 
   const allTasks = await gatherCopyTasks(src, dest);
+
+  const { maxParallelProcesses } = appConfig();
 
   await asyncPool(allTasks, maxParallelProcesses, async (task) => {
     if (task.isDirectory) {

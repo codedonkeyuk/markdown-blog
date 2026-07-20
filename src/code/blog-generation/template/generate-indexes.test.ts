@@ -22,6 +22,9 @@ describe("Test generate-indexes.ts", async () => {
       maxPage: number,
     ) => string
   >;
+  const appConfigMock = mock.fn() as Mock<
+    (path: string) => Record<string, any>
+  >;
 
   beforeEach(async () => {
     readFileMock.mock.mockImplementation(async () => "<html>Template</html>");
@@ -39,13 +42,15 @@ describe("Test generate-indexes.ts", async () => {
       defaultExport: createIndexPageMock,
     });
     mock.module("../../app-config.ts", {
-      namedExports: {
-        blogProductionPath: "./dist/blog",
-        blogIndexPageTemplate: "./src/blog/page1.html",
-        postsPerPage: 2,
-        maxParallelProcesses: 50,
-      },
+      defaultExport: appConfigMock,
     });
+
+    appConfigMock.mock.mockImplementation((path: string) => ({
+      blogProductionPath: "./dist/blog",
+      blogIndexPageTemplate: "./src/blog/page1.html",
+      postsPerPage: 2,
+      maxParallelProcesses: 50,
+    }));
   });
 
   afterEach(() => {

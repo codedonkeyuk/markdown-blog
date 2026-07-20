@@ -1,118 +1,87 @@
-import assert from "node:assert";
-import {
-  describe,
-  test,
-  mock,
-  beforeEach,
-  afterEach,
-  type Mock,
-} from "node:test";
+import { test, describe, beforeEach, afterEach, mock } from "node:test";
+import * as assert from "node:assert/strict";
+import { promises as fs } from "node:fs";
+import * as fsSync from "node:fs";
 import * as path from "path";
 
-describe("Test copy-folder-contents.ts", async () => {
-  const mkdirMock = mock.fn() as Mock<
-    (path: string, options: { recursive: boolean }) => Promise<void>
-  >;
-  const readdirMock = mock.fn() as Mock<(path: string) => Promise<string[]>>;
-  const statMock = mock.fn() as Mock<() => Promise<{}>>;
-  const copyFileMock = mock.fn() as Mock<() => Promise<void>>;
+const SANDBOX_DIR = path.resolve("./copy-test-sandbox");
+const SRC_DIR = path.join(SANDBOX_DIR, "src");
+const DEST_DIR = path.join(SANDBOX_DIR, "dest");
 
-  let fsContext: any;
+describe("Copy Folder Contents Script Tests", () => {
+  const mockConfig = {
+    maxParallelProcesses: 4,
+    siteSourcePath: "./src/site",
+    postSourcePath: "./src/blog-content",
+    productionPath: "./dist",
+    postsPerPage: 20,
+    blogPath: "blog",
+    maxCompresionProcesses: 4,
+    siteTitle: "Markdown Blog",
+    siteAddress: "http://localhost:3001",
+    rssDescription: "A web developers portfolio and blog.",
+    rssPostLimit: 20,
+    blogProductionPath: "./dist/blog",
+    blogIndexPageTemplate: "./src/site/blog/page1.html",
+    postPageTemplate: "./src/site/blog/post/post.html",
+  };
 
-  beforeEach(async () => {
-    fsContext = mock.module("fs", {
-      namedExports: {
-        promises: {
-          mkdir: mkdirMock,
-          readdir: readdirMock,
-          stat: statMock,
-          copyFile: copyFileMock,
-        },
-      },
-    });
+  const configUrl = new URL("../../app-config.ts", import.meta.url).href;
+
+  mock.module(configUrl, {
+    exports: {
+      default: () => mockConfig,
+    },
+  });
+
+  beforeEach(() => {
+    if (fsSync.existsSync(SANDBOX_DIR)) {
+      fsSync.rmSync(SANDBOX_DIR, { recursive: true, force: true });
+    }
+    fsSync.mkdirSync(SRC_DIR, { recursive: true });
+    fsSync.mkdirSync(path.join(SRC_DIR, "nested-folder"), { recursive: true });
+
+    fsSync.writeFileSync(path.join(SRC_DIR, "root-file.txt"), "hello root");
+    fsSync.writeFileSync(
+      path.join(SRC_DIR, "nested-folder", "child-file.txt"),
+      "hello child",
+    );
   });
 
   afterEach(() => {
-    mkdirMock.mock.resetCalls();
-    readdirMock.mock.resetCalls();
-    statMock.mock.resetCalls();
-    copyFileMock.mock.resetCalls();
-
-    fsContext?.restore();
+    if (fsSync.existsSync(SANDBOX_DIR)) {
+      fsSync.rmSync(SANDBOX_DIR, { recursive: true, force: true });
+    }
   });
 
-  test("Ensure folder contents are copied correctly for files", async () => {
-    readdirMock.mock.mockImplementation(() =>
-      Promise.resolve(["file1.txt", "file2.txt"]),
+  test("should successfully mirror files and directories using mocked maxParallelProcesses", async () => {
+    const { default: copyFolderContents } = await import(
+      `./copy-folder-contents.ts?update=${Date.now()}`
     );
-    statMock.mock.mockImplementation(() =>
-      Promise.resolve({
-        isDirectory: () => false,
-      }),
+
+    await copyFolderContents(SRC_DIR, DEST_DIR);
+
+    const rootFileExists = fsSync.existsSync(
+      path.join(DEST_DIR, "root-file.txt"),
     );
-    mkdirMock.mock.mockImplementation(() => Promise.resolve());
-    copyFileMock.mock.mockImplementation(() => Promise.resolve());
-
-    const testee = await import("./copy-folder-contents.ts");
-    await testee.default("./src", "./dest");
-
-    assert.strictEqual(mkdirMock.mock.callCount(), 3);
-    assert.strictEqual(mkdirMock.mock.calls[0].arguments[0], "./dest");
-    assert.strictEqual(mkdirMock.mock.calls[0].arguments[1].recursive, true);
-
-    assert.strictEqual(readdirMock.mock.callCount(), 1);
-    assert.strictEqual(readdirMock.mock.calls[0].arguments[0], "./src");
-
-    assert.strictEqual(statMock.mock.callCount(), 2);
-    assert.strictEqual(copyFileMock.mock.callCount(), 2);
-
-    assert.deepStrictEqual(copyFileMock.mock.calls[0].arguments, [
-      path.join("./src", "file1.txt"),
-      path.join("./dest", "file1.txt"),
-    ]);
-    assert.deepStrictEqual(copyFileMock.mock.calls[1].arguments, [
-      path.join("./src", "file2.txt"),
-      path.join("./dest", "file2.txt"),
-    ]);
-  });
-
-  test("Ensure subdirectories are copied recursively", async () => {
-    readdirMock.mock.mockImplementationOnce(
-      () => Promise.resolve(["subdir"]),
-      0,
+    const nestedDirExists = fsSync.existsSync(
+      path.join(DEST_DIR, "nested-folder"),
     );
-    readdirMock.mock.mockImplementationOnce(
-      () => Promise.resolve(["file3.txt"]),
-      1,
+    const childFileExists = fsSync.existsSync(
+      path.join(DEST_DIR, "nested-folder", "child-file.txt"),
     );
-    statMock.mock.mockImplementationOnce(
-      () =>
-        Promise.resolve({
-          isDirectory: () => true,
-        }),
-      0,
+
+    assert.ok(rootFileExists, "The root level asset failed to copy.");
+    assert.ok(nestedDirExists, "The nested folder tree was not created.");
+    assert.ok(
+      childFileExists,
+      "The child asset within the sub-directory failed to copy.",
     );
-    statMock.mock.mockImplementationOnce(
-      () =>
-        Promise.resolve({
-          isDirectory: () => false,
-        }),
-      1,
+
+    const rootContents = await fs.readFile(
+      path.join(DEST_DIR, "root-file.txt"),
+      "utf8",
     );
-    mkdirMock.mock.mockImplementation(() => Promise.resolve());
-    copyFileMock.mock.mockImplementation(() => Promise.resolve());
-
-    const testee = await import("./copy-folder-contents.ts");
-    await testee.default("./src", "./dest");
-
-    assert.strictEqual(mkdirMock.mock.callCount(), 3);
-    assert.strictEqual(readdirMock.mock.callCount(), 2);
-    assert.strictEqual(statMock.mock.callCount(), 2);
-    assert.strictEqual(copyFileMock.mock.callCount(), 1);
-
-    assert.deepStrictEqual(copyFileMock.mock.calls[0].arguments, [
-      path.join("./src", "subdir", "file3.txt"),
-      path.join("./dest", "subdir", "file3.txt"),
-    ]);
+    assert.strictEqual(rootContents, "hello root");
   });
 });

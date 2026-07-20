@@ -1,14 +1,34 @@
 import { test, mock, afterEach, describe } from "node:test";
 import assert from "node:assert";
 import { type PostInfo } from "../types.ts";
-import { productionPath, siteAddress, rssPostLimit } from "../../app-config.ts";
+
+// 1. Set up your runtime mock values block
+const mockConfigValues = {
+  productionPath: "/mock/prod/path",
+  siteAddress: "http://localhost:3001",
+  rssPostLimit: 20,
+};
+
+// 2. Mock app-config.ts BEFORE loading any test suites or production code.
+// This resolves the crash inside rss-feed.ts which calls appConfig().
+mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+  exports: {
+    default: () => mockConfigValues,
+  },
+});
+
+// Extract values safely inside the test suite for local assertions
+const { productionPath, siteAddress, rssPostLimit } = mockConfigValues;
 
 const mockCreateFile = mock.fn(async (path: string, content: string) => {
   return Promise.resolve();
 });
 
-mock.module("../file-utils/create-file.ts", {
-  namedExports: { default: mockCreateFile },
+// 3. CORRECTED: Register default exports using the modern exports block layout
+mock.module(new URL("../file-utils/create-file.ts", import.meta.url).href, {
+  exports: {
+    default: mockCreateFile,
+  },
 });
 
 describe("Test rss-feed.ts", () => {

@@ -6,8 +6,9 @@ import {
   minify as minifyHTML,
   type Options as HTMLMinifyOptions,
 } from "html-minifier-terser";
-import { productionPath } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 
+const { productionPath } = appConfig();
 const DIST_DIR: string = path.resolve(productionPath);
 
 function getFilesRecursively(dir: string): string[] {

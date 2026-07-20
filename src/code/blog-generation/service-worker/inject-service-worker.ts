@@ -1,5 +1,5 @@
 import createFile from "../file-utils/create-file.ts";
-import { productionPath } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 
 const PRECACHE_ASSETS = [
   "/",
@@ -116,6 +116,7 @@ self.addEventListener("fetch", (event) => {
 `;
 
 const injectServiceWorker = async () => {
+  const { productionPath } = appConfig();
   const versionNo = generateAssetHash(PRECACHE_ASSETS);
 
   return createFile(

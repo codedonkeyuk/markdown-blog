@@ -8,6 +8,20 @@ import {
   type Mock,
 } from "node:test";
 
+// 1. Establish your mock config state function globally
+const mockConfigValues = {
+  blogProductionPath: "./dist/blog",
+  postSourcePath: "./src/blog/post",
+  blogPath: "blog",
+  maxParallelProcesses: 50,
+};
+
+mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+  exports: {
+    default: () => mockConfigValues,
+  },
+});
+
 describe("Test generate-post-info.ts", () => {
   const readDirectoriesMock = mock.fn() as Mock<
     (directoryPath: string) => Promise<string[]>
@@ -16,6 +30,9 @@ describe("Test generate-post-info.ts", () => {
   const readFileMock = mock.fn() as Mock<
     (path: string, options?: any) => Promise<string>
   >;
+
+  // Unique query tracking id index counter to cleanly bypass the ESM loader cache
+  let cacheBustCounter = 0;
 
   beforeEach(async () => {
     readDirectoriesMock.mock.mockImplementation(async () => [
@@ -36,24 +53,19 @@ describe("Test generate-post-info.ts", () => {
       });
     });
 
-    mock.module("../file-utils/read-directories.ts", {
-      namedExports: {
-        default: readDirectoriesMock,
+    // 2. Updated namedExports/defaultExport keys to modern exports blocks to fix loader deprecation bugs
+    mock.module(
+      new URL("../file-utils/read-directories.ts", import.meta.url).href,
+      {
+        exports: {
+          default: readDirectoriesMock,
+        },
       },
-    });
+    );
 
-    mock.module("../file-utils/read-file.ts", {
-      namedExports: {
+    mock.module(new URL("../file-utils/read-file.ts", import.meta.url).href, {
+      exports: {
         default: readFileMock,
-      },
-    });
-
-    mock.module("../../app-config.ts", {
-      namedExports: {
-        blogProductionPath: "./dist/blog",
-        postSourcePath: "./src/blog/post",
-        blogPath: "blog",
-        maxParallelProcesses: 50,
       },
     });
   });
@@ -64,7 +76,10 @@ describe("Test generate-post-info.ts", () => {
   });
 
   test("Ensure post info is generated correctly", async () => {
-    const testee = await import(`./generate-post-info.ts?update=${Date.now()}`);
+    cacheBustCounter++;
+    const testee = await import(
+      `./generate-post-info.ts?update=${Date.now()}-${cacheBustCounter}`
+    );
     const result = await testee.default();
 
     assert.strictEqual(readDirectoriesMock.mock.callCount(), 1);
@@ -93,7 +108,10 @@ describe("Test generate-post-info.ts", () => {
   test("Ensure empty directory list returns empty array", async () => {
     readDirectoriesMock.mock.mockImplementation(async () => []);
 
-    const testee = await import(`./generate-post-info.ts?update=${Date.now()}`);
+    cacheBustCounter++;
+    const testee = await import(
+      `./generate-post-info.ts?update=${Date.now()}-${cacheBustCounter}`
+    );
     const result = await testee.default();
 
     assert.strictEqual(result.length, 0);

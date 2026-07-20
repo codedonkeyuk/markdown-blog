@@ -2,13 +2,15 @@ import { type PostInfo } from "../types.ts";
 import { spellCheckDocument, type ValidationIssue } from "cspell-lib";
 import { resolve } from "path";
 
-import { postSourcePath, maxParallelProcesses } from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 import asyncPool from "../thread-management/async-pool.ts";
 import { pathToFileURL } from "url";
 
 const customWords: string[] = [];
 
 export async function spellCheck(postInfo: PostInfo[]): Promise<void> {
+  const { postSourcePath, maxParallelProcesses } = appConfig();
+
   let allIssues: (any[] | ValidationIssue)[] = [];
 
   await asyncPool(postInfo, maxParallelProcesses, async (post) => {

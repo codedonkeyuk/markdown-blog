@@ -6,7 +6,36 @@ import * as path from "path";
 const TEST_DIST = path.resolve("./dist-test-sandbox");
 
 describe("Minifier Script Tests", () => {
+  // 1. Your configurable configuration object
+  const mockConfig = {
+    productionPath: TEST_DIST,
+    siteSourcePath: "./src/site",
+    postSourcePath: "./src/blog-content",
+    postsPerPage: 20,
+    blogPath: "blog",
+    maxParallelProcesses: 24,
+    maxCompresionProcesses: 4,
+    siteTitle: "Markdown Blog",
+    siteAddress: "http://localhost:3001",
+    rssDescription: "A web developers portfolio and blog.",
+    rssPostLimit: 20,
+    blogProductionPath: `${TEST_DIST}/blog`,
+    blogIndexPageTemplate: "./src/site/blog/page1.html",
+    postPageTemplate: "./src/site/blog/post/post.html",
+  };
+
+  // 2. CORRECTION: Change exports to provide the function as the 'default' key
+  mock.module("../../app-config.ts", {
+    exports: {
+      default: () => mockConfig,
+    },
+  });
+
   beforeEach(() => {
+    // 3. Keep your test sandbox state synced up
+    mockConfig.productionPath = TEST_DIST;
+    mockConfig.blogProductionPath = `${TEST_DIST}/blog`;
+
     if (fs.existsSync(TEST_DIST)) {
       fs.rmSync(TEST_DIST, { recursive: true, force: true });
     }
@@ -36,12 +65,8 @@ describe("Minifier Script Tests", () => {
   });
 
   test("should successfully minify files in mocked productionPath directory", async () => {
-    mock.module("../../app-config.ts", {
-      namedExports: {
-        productionPath: TEST_DIST,
-      },
-    });
-
+    // 4. Clean up: Remove the old `mock.module` block from inside the test body.
+    // The query string cache buster (?update=) will cleanly pick up the module mock above.
     const { default: minifySite } = await import(
       `./minify-site.ts?update=${Date.now()}`
     );

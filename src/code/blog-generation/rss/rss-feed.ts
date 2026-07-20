@@ -1,14 +1,15 @@
 import { type PostInfo } from "../types.ts";
-import {
-  productionPath,
-  siteTitle,
-  siteAddress,
-  rssDescription,
-  rssPostLimit,
-} from "../../app-config.ts";
+import appConfig from "../../app-config.ts";
 import createFile from "../file-utils/create-file.ts";
 
 const rssFeed = async (posts: PostInfo[]): Promise<void> => {
+  const {
+    siteAddress,
+    siteTitle,
+    rssDescription,
+    productionPath,
+    rssPostLimit,
+  } = appConfig();
   const sortedPosts = [...posts]
     .sort((a, b) => b.creationTimestamp - a.creationTimestamp)
     .slice(0, rssPostLimit);
