@@ -68,8 +68,6 @@ describe("Test create-index-page.ts", async () => {
     ];
     const result = testee.default(pageTemplate, posts, 0, 1);
 
-    console.log(result);
-
     assert(
       result.includes(
         '<meta property="og:url" content="http://localhost:3001/post/page1" />',
