@@ -40,14 +40,6 @@ This project is very big and convoluted. I suspect ill break the templating logi
 
 ## Prerequisites
 
-### Add inkscape
-
-This has been designed to work with inkscape. If you can't design with SVG's then this blog is not for you.
-
-This site also converts SVGs into PNGs using the inkscape app, so it will break without inkscape installed.
-
-I also wrote this on MAC, support is offered for windows but I never tested it directly.
-
 ### Add Config file to you project
 
 You need to create a `blog-config.json` file in the root of your project.

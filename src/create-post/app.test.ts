@@ -48,7 +48,7 @@ test("Unit Test: app.ts captures stdin and executes file creators", async (t) =>
   );
 
   const filenames = Object.keys(mockCreatedFiles);
-  assert.strictEqual(filenames.length, 4);
+  assert.strictEqual(filenames.length, 3);
 
   const jsonFile = filenames.find((name) => name.endsWith("postInfo.json"))!;
   const metadata = JSON.parse(mockCreatedFiles[jsonFile]);

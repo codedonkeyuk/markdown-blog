@@ -46,6 +46,7 @@
     "cspell": "^10.0.1",
     "html-validate": "^11.5.5",
     "lightningcss": "^1.32.0",
+    "sharp": "^0.35.3",
     "shiki": "^4.3.1"
   },
   "overrides": {

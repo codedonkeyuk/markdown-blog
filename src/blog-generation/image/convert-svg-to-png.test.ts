@@ -4,6 +4,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import convertSvgToPng from "./convert-svg-to-png.ts";
+import sharp from "sharp"; // Imported to check resulting dimensions
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,6 +31,10 @@ describe("convertSvgToPng Native Tests", () => {
     });
     assert.equal(result.success, true);
     assert.equal(fs.existsSync(outputPngPath), true);
+
+    // Verify Sharp actually resized the physical image file
+    const metadata = await sharp(outputPngPath).metadata();
+    assert.equal(metadata.width, 300);
   });
 
   it("should throw an explicit error if the input SVG file does not exist", async () => {
@@ -37,6 +42,6 @@ describe("convertSvgToPng Native Tests", () => {
 
     await assert.rejects(async () => {
       await convertSvgToPng(invalidInputPath, outputPngPath);
-    }, /Inkscape Conversion Failed: Input file does not exist/);
+    }, /Sharp Conversion Failed: Input file does not exist/); // Updated Regex to match Sharp
   });
 });
