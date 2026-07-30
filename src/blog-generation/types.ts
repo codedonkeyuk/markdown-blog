@@ -6,7 +6,6 @@ export type PostInfoJson = {
   nameSlug: string;
   pageDescription: string;
   postThumbDescription: string;
-  pageImageDescription: string;
   author: string;
   publish: boolean;
 };

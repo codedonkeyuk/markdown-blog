@@ -32,7 +32,6 @@ const generatePostInfo = async (): Promise<PostInfo[]> => {
         directory,
         pageDescription,
         postThumbDescription,
-        pageImageDescription,
         author,
       }) => {
         const postDate = new Date(creationTimestamp);
@@ -54,7 +53,6 @@ const generatePostInfo = async (): Promise<PostInfo[]> => {
           blogUrl,
           pageDescription,
           postThumbDescription,
-          pageImageDescription,
           author,
           publish: true,
         };

@@ -60,7 +60,6 @@ process.stdin.on("data", async (data) => {
       nameSlug,
       pageDescription: "A new post",
       postThumbDescription: "A new post",
-      pageImageDescription: "A new post",
       author: "Joe Bloggs",
       publish: true,
     },

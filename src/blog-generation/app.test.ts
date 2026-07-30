@@ -17,7 +17,6 @@ describe("Test app.ts", () => {
       blogUrl: "./2012-12-12/post/post",
       pageDescription: "A simple description",
       postThumbDescription: "thumbnail description",
-      pageImageDescription: "page images description",
       author: "Joe Bloggs",
       publish: true,
     },

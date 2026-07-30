@@ -57,10 +57,7 @@ const createIndexPage = (
               .replaceAll(
                 templateParameterRegex("POST-TEMPLATE-THUMBNAIL"),
                 `
-                <picture>
-                  <source media="(max-width: 700px)" srcset="${post.dateDirectory}/post-image.svg" width="50" height="50">
-                  <img src="${post.dateDirectory}/thumbnail.svg" width="1200" height="400" class="post-index__article-img" alt="${post.pageImageDescription}">
-                </picture>
+                  <img src="${post.dateDirectory}/thumbnail.svg" width="1200" height="360" class="post-index__article-img" alt="${post.postThumbDescription}">
                 `,
               )
               .replaceAll(

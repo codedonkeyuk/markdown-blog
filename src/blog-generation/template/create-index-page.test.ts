@@ -43,8 +43,7 @@ describe("Test create-index-page.ts", async () => {
         blogPage: "",
         blogUrl: "",
         pageDescription: "Post one page description",
-        postThumbDescription: "",
-        pageImageDescription: "Post one thumbnail description",
+        postThumbDescription: "Post one page description thumbnail",
         author: "",
         publish: true,
       },
@@ -60,8 +59,7 @@ describe("Test create-index-page.ts", async () => {
         blogPage: "",
         blogUrl: "",
         pageDescription: "Post two page description",
-        postThumbDescription: "",
-        pageImageDescription: "Post two thumbnail description",
+        postThumbDescription: "Post two page description thumbnail",
         author: "",
         publish: true,
       },
@@ -94,19 +92,19 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post-index__article-img"\s+alt="Post one thumbnail description">\s*<\/picture>/,
+      /<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post one page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 1</h2>"));
     assert(result.includes("Post one page description"));
-    assert(result.includes("Post one thumbnail description"));
+    assert(result.includes("Post one page description thumbnail"));
 
     assert.match(
       result,
-      /<picture>\s*<source\s+media="\(max-width:\s*700px\)"\s+srcset="\/post-image\.svg"\s+width="50"\s+height="50">\s*<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="400"\s+class="post-index__article-img"\s+alt="Post two thumbnail description">\s*<\/picture>/,
+      /<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post two page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 2</h2>"));
     assert(result.includes("Post two page description"));
-    assert(result.includes("Post two thumbnail description"));
+    assert(result.includes("Post two page description thumbnail"));
   });
 
   test("Ensure navigation is injected correctly for first page", async () => {
