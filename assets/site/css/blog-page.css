@@ -15,7 +15,15 @@
 }
 
 .post-page-article-thumbnail {
+  width: 100%;
   background-color: black;
+  flex-grow: 1;
+}
+
+.post-page-article-thumbnail img {
+  width: 100%;
+  max-width: 1200px;
+  max-height: 630px;
   flex-grow: 1;
 }
 
