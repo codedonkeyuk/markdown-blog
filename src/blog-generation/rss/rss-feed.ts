@@ -36,7 +36,7 @@ const rssFeed = async (posts: PostInfo[]): Promise<void> => {
     <title><![CDATA[${siteTitle}]]></title>
     <link>${siteAddress}</link>
     <description><![CDATA[${rssDescription}]]></description>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${sortedPosts[0].creationTimestamp ? new Date(sortedPosts[0].creationTimestamp).toUTCString() : new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${siteAddress}/rss.xml" rel="self" type="application/rss+xml" />
     ${rssItems}
   </channel>
