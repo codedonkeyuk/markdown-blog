@@ -92,7 +92,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post one page description thumbnail">/,
+      /<img\s+src="\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post one page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 1</h2>"));
     assert(result.includes("Post one page description"));
@@ -100,7 +100,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<img\s+src="\/thumbnail\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post two page description thumbnail">/,
+      /<img\s+src="\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post two page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 2</h2>"));
     assert(result.includes("Post two page description"));

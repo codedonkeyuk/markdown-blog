@@ -112,9 +112,8 @@ It is expected that you will have to update the images and the content in post-i
 | blog file         | Description                                                                                                                                                                                                      |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/content.md`     | THis is markdownfile where you post content lives. WImply edit using a markdown editor. Not all markdown is support, paragraphs, headings, and lists are, and code samples. Tables are not for usability reasons |
-| `/post-image.svg` | The main image for the blog post, will be seen in the post its self.                                                                                                                                             |
+| `/post-image.svg` | The main image for the blog post, will be seen in the post and social media shares.                                                                                                                              |
 | `/post-info.json` | All the information outside the post contnet. Creation date time, author, text used in social shares, image descriptions for accessibility                                                                       |
-| `/thumbnail.svg`  | Used by social share links (LinkedIn, Twitter, instagram, etc). Used by post index page in dessktop mode, in mobile it is replaced by `/post-image.svg` as it looks better                                       |
 
 ### Prevent publication of the post
 
