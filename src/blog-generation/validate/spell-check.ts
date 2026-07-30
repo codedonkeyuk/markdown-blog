@@ -6,7 +6,7 @@ import appConfig from "../../app-config.ts";
 import asyncPool from "../thread-management/async-pool.ts";
 import { pathToFileURL } from "url";
 
-const customWords: string[] = [];
+const customWords: string[] = ["enshittification"];
 
 export async function spellCheck(postInfo: PostInfo[]): Promise<void> {
   const { postSourcePath, maxParallelProcesses } = appConfig();
