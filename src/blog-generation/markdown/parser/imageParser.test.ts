@@ -6,7 +6,10 @@ describe("Image Parser Module", () => {
   describe("Isolated Function Arguments", () => {
     it("should successfully generate an img tag with valid arguments", () => {
       const result = imageParse("![Puppy](puppy.jpg)", "Puppy", "puppy.jpg");
-      assert.strictEqual(result, '<img src="puppy.jpg" alt="Puppy">');
+      assert.strictEqual(
+        result,
+        '<div class="post-image-frame"><img src="puppy.jpg" alt="Puppy" class="post-image"></div>',
+      );
     });
 
     it("should throw an error if altText is empty", () => {
@@ -44,7 +47,7 @@ describe("Image Parser Module", () => {
       const output = input.replace(imageRegex, imageParse);
       assert.strictEqual(
         output,
-        'Look at this: <img src="sunset.jpg" alt="A beautiful sunset">',
+        'Look at this: <div class="post-image-frame"><img src="sunset.jpg" alt="A beautiful sunset" class="post-image"></div>',
       );
     });
 

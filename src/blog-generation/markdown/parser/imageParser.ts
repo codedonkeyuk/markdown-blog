@@ -6,5 +6,5 @@ export const imageParse = (_: string, altText?: string, url?: string) => {
       `Accessible image link missing either url (${url}), or altText (${altText}), or both`,
     );
   }
-  return `<img src="${url}" alt="${altText}">`;
+  return `<div class="post-image-frame"><img src="${url}" alt="${altText}" class="post-image"></div>`;
 };

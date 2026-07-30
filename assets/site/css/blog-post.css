@@ -17,6 +17,14 @@
   object-fit: cover;
 }
 
+.post-image-frame {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  width: 100%;
+  padding: 15px 0;
+}
+
 @media (max-width: 600px) {
   #post-details {
     justify-content: center;
