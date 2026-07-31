@@ -97,25 +97,30 @@ export default async function hashAssets() {
       );
 
       const regex = new RegExp(
-        `(["''\\(\\)=<>\\s])(?:${escapedDomain})?${escapedPath}(["''\\(\\)=<>\\s])`,
+        `(["'\\(\\)])([\\s\\n\\r]*)(?:${escapedDomain})?${escapedPath}([\\s\\n\\r]*)(["'\\(\\)])`,
         "gi",
       );
 
-      content = content.replace(regex, (match, openBoundary, closeBoundary) => {
-        if (
-          (openBoundary === '"' && closeBoundary !== '"') ||
-          (openBoundary === "'" && closeBoundary !== "'") ||
-          (openBoundary === "(" && closeBoundary !== ")")
-        ) {
-          return match;
-        }
+      content = content.replace(
+        regex,
+        (match, openBoundary, leadWs, trailWs, closeBoundary) => {
+          if (
+            (openBoundary === '"' && closeBoundary !== '"') ||
+            (openBoundary === "'" && closeBoundary !== "'") ||
+            (openBoundary === "(" && closeBoundary !== ")")
+          ) {
+            return match;
+          }
 
-        const hasDomain = new RegExp(escapedDomain, "i").test(match);
-        const finalPath = hasDomain
-          ? `${cleanDomain}${hashedPath}`
-          : hashedPath;
-        return `${openBoundary}${finalPath}${closeBoundary}`;
-      });
+          const hasDomain = match
+            .toLowerCase()
+            .includes(cleanDomain.toLowerCase());
+          const finalPath = hasDomain
+            ? `${cleanDomain}${hashedPath}`
+            : hashedPath;
+          return `${openBoundary}${leadWs}${finalPath}${trailWs}${closeBoundary}`;
+        },
+      );
     }
 
     if (content !== originalContent) {
