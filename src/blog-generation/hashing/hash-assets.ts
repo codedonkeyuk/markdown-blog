@@ -57,7 +57,7 @@ export default async function hashAssets() {
         "/" + path.relative(productionPath, newFilePath).replace(/\\/g, "/");
 
       fs.writeFileSync(newFilePath, fileBuffer);
-      assetHashMap.set(relativeWebPath, newRelativeWebPath);
+      assetHashMap.set(relativeWebPath.toLowerCase(), newRelativeWebPath);
       filesToDelete.push(filePath);
     }
 
@@ -69,21 +69,25 @@ export default async function hashAssets() {
   const sortedAssets = Array.from(assetHashMap.keys()).sort(
     (a, b) => b.length - a.length,
   );
-  const escapedDomain = siteAddress.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const cleanDomain = siteAddress.replace(/\/$/, "");
+  const escapedDomain = cleanDomain.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
   for (let i = 0; i < textFiles.length; i++) {
     let filePath = textFiles[i];
 
     let relativeWebPath =
       "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
-    if (assetHashMap.has(relativeWebPath)) {
-      filePath = path.join(productionPath, assetHashMap.get(relativeWebPath)!);
+    if (assetHashMap.has(relativeWebPath.toLowerCase())) {
+      filePath = path.join(
+        productionPath,
+        assetHashMap.get(relativeWebPath.toLowerCase())!,
+      );
     }
 
     if (!fs.existsSync(filePath)) continue;
 
-    let content = fs.readFileSync(filePath, "utf8");
-    let hasChanged = false;
+    let originalContent = fs.readFileSync(filePath, "utf8");
+    let content = originalContent;
 
     for (const originalPath of sortedAssets) {
       const hashedPath = assetHashMap.get(originalPath)!;
@@ -93,26 +97,28 @@ export default async function hashAssets() {
       );
 
       const regex = new RegExp(
-        `(["'\\(\\)])(?:${escapedDomain})?(${escapedPath})(["'\\(\\)])`,
-        "g",
+        `(["''\\(\\)=<>\\s])(?:${escapedDomain})?${escapedPath}(["''\\(\\)=<>\\s])`,
+        "gi",
       );
 
-      if (regex.test(content)) {
-        content = content.replace(
-          regex,
-          (match, openQuote, pathOnly, closeQuote) => {
-            const hasDomain = match.includes(siteAddress);
-            const finalPath = hasDomain
-              ? `${siteAddress}${hashedPath}`
-              : hashedPath;
-            return `${openQuote}${finalPath}${closeQuote}`;
-          },
-        );
-        hasChanged = true;
-      }
+      content = content.replace(regex, (match, openBoundary, closeBoundary) => {
+        if (
+          (openBoundary === '"' && closeBoundary !== '"') ||
+          (openBoundary === "'" && closeBoundary !== "'") ||
+          (openBoundary === "(" && closeBoundary !== ")")
+        ) {
+          return match;
+        }
+
+        const hasDomain = new RegExp(escapedDomain, "i").test(match);
+        const finalPath = hasDomain
+          ? `${cleanDomain}${hashedPath}`
+          : hashedPath;
+        return `${openBoundary}${finalPath}${closeBoundary}`;
+      });
     }
 
-    if (hasChanged) {
+    if (content !== originalContent) {
       fs.writeFileSync(filePath, content, "utf8");
     }
   }
