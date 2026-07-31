@@ -1,8 +1,5 @@
 {
   "siteSourcePath": "./assets/site",
   "postSourcePath": "./tmp/blog-content",
-  "productionPath": "./tmp/site",
-  "serviceWorker": {
-    "precacheAssets": []
-  }
+  "productionPath": "./tmp/site"
 }

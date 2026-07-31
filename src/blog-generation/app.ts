@@ -22,9 +22,9 @@ await spellCheck(postInfo);
 await Promise.all([
   generatePostPages(postInfo),
   generateIndexes(postInfo),
+  await injectServiceWorker(),
   rssFeed(postInfo),
 ]);
 
 await hashAssets();
-await injectServiceWorker();
 await minifySite();

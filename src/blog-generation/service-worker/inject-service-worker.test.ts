@@ -1,13 +1,10 @@
 import { test, mock, afterEach, describe } from "node:test";
 import assert from "node:assert";
-import fs from "node:fs";
-import path from "node:path";
+import fs from "fs";
+import path from "path";
 
 const mockConfig = {
   productionPath: "/mock/prod/path",
-  serviceWorker: {
-    precacheAssets: ["/portfolio-cursed", "/js/app.js", "/offline"],
-  },
 };
 
 mock.module(new URL("../../app-config.ts", import.meta.url).href, {
@@ -26,12 +23,12 @@ mock.module(new URL("../file-utils/create-file.ts", import.meta.url).href, {
   },
 });
 
-// Mock the file system methods to intercept your source code's directory scan
 mock.method(fs, "readdirSync", (dirPath: string) => {
-  if (path.resolve(dirPath) === path.resolve("/mock/prod/path")) {
+  const resolved = path.resolve(dirPath);
+  if (resolved === path.resolve("/mock/prod/path")) {
     return ["index.html", "js", "portfolio-cursed.html", "offline.html"];
   }
-  if (path.resolve(dirPath) === path.resolve("/mock/prod/path/js")) {
+  if (resolved === path.resolve("/mock/prod/path/js")) {
     return ["app.js"];
   }
   return [];
@@ -72,9 +69,9 @@ describe("Test app.ts", () => {
     assert.doesNotMatch(generatedContent, /site-assets-vundefined/);
 
     assert.match(generatedContent, /"\/js\/app\.js"/);
-    assert.match(generatedContent, /"\/offline"/);
+    assert.match(generatedContent, /"\/portfolio-cursed"/);
 
-    assert.match(generatedContent, /caches\.match\("\/offline\.html"\)/);
+    assert.match(generatedContent, /caches\.match\("\/offline"\)/);
 
     assert.match(
       generatedContent,
