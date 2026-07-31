@@ -38,7 +38,7 @@ describe("Test create-index-page.ts", async () => {
         creationTime: "11:00:00 am",
         creationTimestamp: 12345,
         blogDirectory: "",
-        dateDirectory: "",
+        dateDirectory: "2012-12-11",
         directory: "",
         blogPage: "",
         blogUrl: "",
@@ -54,7 +54,7 @@ describe("Test create-index-page.ts", async () => {
         creationTime: "12:00:00 am",
         creationTimestamp: 6789,
         blogDirectory: "",
-        dateDirectory: "",
+        dateDirectory: "2012-12-12",
         directory: "",
         blogPage: "",
         blogUrl: "",
@@ -90,7 +90,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<img\s+src="\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post one page description thumbnail">/,
+      /<img\s+src="\/blog\/2012-12-11\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post one page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 1</h2>"));
     assert(result.includes("Post one page description"));
@@ -98,7 +98,7 @@ describe("Test create-index-page.ts", async () => {
 
     assert.match(
       result,
-      /<img\s+src="\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post two page description thumbnail">/,
+      /<img\s+src="\/blog\/2012-12-12\/post-image\.svg"\s+width="1200"\s+height="360"\s+class="post-index__article-img"\s+alt="Post two page description thumbnail">/,
     );
     assert(result.includes("<h2>Post 2</h2>"));
     assert(result.includes("Post two page description"));

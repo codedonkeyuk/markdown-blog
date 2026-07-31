@@ -12,35 +12,31 @@ import {
 } from "./parser/orderedListParser.ts";
 import { parseCodeBlocks } from "./parser/codeParser.ts";
 
-const markdownHtmlConvertor = async (markdown: string): Promise<string> => {
-  // 1. Process Shiki code fences completely first
+const markdownHtmlConvertor = async (
+  baseDirectory: string,
+  markdown: string,
+): Promise<string> => {
   let html = await parseCodeBlocks(markdown);
 
-  // 2. Process structural layout blocks globally so list groups stay unified
   html = html
     .replace(headerRegex, headerParse)
     .replace(orderedListRegex, orderedListParse)
     .replace(bulletListRegex, bulletListParse);
 
-  // 3. Separate the text elements to process paragraphs line-by-line safely
-  return (
-    html
-      .split(/\r?\n/)
-      .map((paragraph) => {
-        return (
-          paragraph
-            // Line-based formatting structures
-            .replace(paragraphRegex, paragraphParse)
-            .replace(imageRegex, imageParse)
-            .replace(linkRegex, linkParse)
-            .replace(boldRegex, boldParse)
-            .replace(italicRegex, italicParse)
-            .replace(underlineRegex, underlineParse)
-        );
-      })
-      // Join back with standard newlines to keep your layout presentation intact
-      .join("\n")
-  );
+  return html
+    .split(/\r?\n/)
+    .map((paragraph) => {
+      return paragraph
+        .replace(paragraphRegex, paragraphParse)
+        .replace(imageRegex, (_: string, altText?: string, url?: string) =>
+          imageParse(baseDirectory, _, altText, url),
+        )
+        .replace(linkRegex, linkParse)
+        .replace(boldRegex, boldParse)
+        .replace(italicRegex, italicParse)
+        .replace(underlineRegex, underlineParse);
+    })
+    .join("\n");
 };
 
 export default markdownHtmlConvertor;

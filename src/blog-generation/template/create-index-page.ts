@@ -31,6 +31,9 @@ const createIndexPage = (
       "",
     );
 
+    const { siteAddress, blogPath } = appConfig();
+    const baseDirectory = `/${blogPath}/`;
+
     return pageTemplate
       .replace(templateParameterRegex("TITLE"), `<title>${title}</title>`)
       .replace(
@@ -57,7 +60,7 @@ const createIndexPage = (
               .replaceAll(
                 templateParameterRegex("POST-TEMPLATE-THUMBNAIL"),
                 `
-                  <img src="${post.dateDirectory}/post-image.svg" width="1200" height="360" class="post-index__article-img" alt="${post.postThumbDescription}">
+                  <img src="${baseDirectory}${post.dateDirectory}/post-image.svg" width="1200" height="360" class="post-index__article-img" alt="${post.postThumbDescription}">
                 `,
               )
               .replaceAll(

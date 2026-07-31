@@ -60,7 +60,7 @@ describe("Markdown HTML Converter Unit Test", () => {
   it("should invoke every single replacement method in the pipeline sequence", async () => {
     const input = `_HEADER_ _BOLD_ _UNDERLINE_ _ITALIC_ _LINK_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_`;
 
-    const results = await markdownHtmlConvertor(input);
+    const results = await markdownHtmlConvertor("/images/", input);
 
     assert.strictEqual(
       results,
