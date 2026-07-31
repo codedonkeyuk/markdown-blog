@@ -39,9 +39,17 @@ export default async function hashAssets() {
     const ext = path.extname(filePath).toLowerCase();
     const dir = path.dirname(filePath);
     const baseName = path.basename(filePath, ext);
+    const fileName = path.basename(filePath).toLowerCase();
 
     let relativeWebPath =
       "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
+
+    if (fileName === "sw.js") {
+      if (TEXT_EXTENSIONS.includes(ext)) {
+        textFiles.push(filePath);
+      }
+      continue;
+    }
 
     if (ASSET_EXTENSIONS.includes(ext) && ext !== ".html" && ext !== ".xml") {
       const fileBuffer = fs.readFileSync(filePath);
