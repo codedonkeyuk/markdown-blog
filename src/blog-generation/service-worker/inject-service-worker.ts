@@ -134,7 +134,8 @@ const injectServiceWorker = async () => {
         "/" +
         path
           .relative(path.resolve(productionPath), filePath)
-          .replace(/\\/g, "/");
+          .replace(/\\/g, "/")
+          .toLowerCase();
 
       if (webPath.endsWith("/index.html")) {
         webPath = webPath.slice(0, -11);

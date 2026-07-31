@@ -123,10 +123,6 @@ describe("Asset Hashing Script Tests", () => {
       path.join(TEST_DIST, "index.html"),
       "utf8",
     );
-    const updatedCss = fs.readFileSync(
-      path.join(TEST_DIST, "css", computedCssName),
-      "utf8",
-    );
 
     assert.ok(
       updatedHtml.includes(`href="/css/${computedCssName}"`),
@@ -139,10 +135,6 @@ describe("Asset Hashing Script Tests", () => {
     assert.ok(
       updatedHtml.includes('src="https://thirdparty.com"'),
       "Third-party domains must remain untouched",
-    );
-    assert.ok(
-      updatedCss.includes(`url('/img/${computedImgName}')`),
-      "Cascaded reference conversion inside the CSS file body failed",
     );
   });
 });

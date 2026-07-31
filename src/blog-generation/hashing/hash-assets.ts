@@ -15,6 +15,7 @@ const ASSET_EXTENSIONS = [
   ".svg",
   ".webp",
   ".ico",
+  ".woff2",
 ];
 const TEXT_EXTENSIONS = [".html", ".css", ".js", ".xml"];
 
@@ -45,9 +46,15 @@ export default async function hashAssets() {
       "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
 
     if (fileName === "sw.js") {
-      if (TEXT_EXTENSIONS.includes(ext)) {
-        textFiles.push(filePath);
-      }
+      textFiles.push(filePath);
+      continue;
+    }
+
+    if (TEXT_EXTENSIONS.includes(ext)) {
+      textFiles.push(filePath);
+    }
+
+    if (relativeWebPath.toLowerCase().includes("/lib/")) {
       continue;
     }
 
@@ -67,10 +74,6 @@ export default async function hashAssets() {
       fs.writeFileSync(newFilePath, fileBuffer);
       assetHashMap.set(relativeWebPath.toLowerCase(), newRelativeWebPath);
       filesToDelete.push(filePath);
-    }
-
-    if (TEXT_EXTENSIONS.includes(ext)) {
-      textFiles.push(filePath);
     }
   }
 
@@ -99,19 +102,40 @@ export default async function hashAssets() {
 
     for (const originalPath of sortedAssets) {
       const hashedPath = assetHashMap.get(originalPath)!;
+      const pathFileName = path.basename(originalPath);
+      const hashedFileName = path.basename(hashedPath);
+
+      const urlRegex = new RegExp(
+        `url\\s*\\(\\s*["']?([^"'\)]+)["']?\\s*\\)`,
+        "gi",
+      );
+      content = content.replace(urlRegex, (match, urlPath) => {
+        const cleanUrlPath = urlPath.trim().replace(/\\/g, "/");
+        if (
+          cleanUrlPath.toLowerCase().endsWith(originalPath.toLowerCase()) ||
+          cleanUrlPath.toLowerCase().endsWith(pathFileName.toLowerCase())
+        ) {
+          const directoryIndex = cleanUrlPath
+            .toLowerCase()
+            .lastIndexOf(pathFileName.toLowerCase());
+          const prefix = urlPath.substring(0, directoryIndex);
+          return `url(${prefix}${hashedFileName})`;
+        }
+        return match;
+      });
+
       const escapedPath = originalPath.replace(
         /[-\/\\^$*+?.()|[\]{}]/g,
         "\\$&",
       );
-
-      const regex = new RegExp(
-        `(["'\\(\\)])([\\s\\n\\r]*)(?:${escapedDomain})?${escapedPath}([\\s\\n\\r]*)(["'\\(\\)])`,
+      const standardRegex = new RegExp(
+        `(["'\\(\\)=<>\\s]|^)(?:${escapedDomain})?${escapedPath}(["'\\(\\)=<>\\s]|$)`,
         "gi",
       );
 
       content = content.replace(
-        regex,
-        (match, openBoundary, leadWs, trailWs, closeBoundary) => {
+        standardRegex,
+        (match, openBoundary, closeBoundary) => {
           if (
             (openBoundary === '"' && closeBoundary !== '"') ||
             (openBoundary === "'" && closeBoundary !== "'") ||
@@ -126,7 +150,7 @@ export default async function hashAssets() {
           const finalPath = hasDomain
             ? `${cleanDomain}${hashedPath}`
             : hashedPath;
-          return `${openBoundary}${leadWs}${finalPath}${trailWs}${closeBoundary}`;
+          return `${openBoundary}${finalPath}${closeBoundary}`;
         },
       );
     }

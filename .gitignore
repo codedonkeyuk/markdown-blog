@@ -4,3 +4,4 @@
 /src/blog/post/**/*.*
 /tmp/blog-content/*/*.*
 /tmp/site/**/*.*
+.vscode
