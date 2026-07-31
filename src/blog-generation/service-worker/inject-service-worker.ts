@@ -1,5 +1,9 @@
+import fs from "fs";
+import path from "path";
 import createFile from "../file-utils/create-file.ts";
 import appConfig from "../../app-config.ts";
+
+const { productionPath } = appConfig();
 
 const generateAssetHash = (assets: string[]): number => {
   const str = assets.join(",");
@@ -12,7 +16,18 @@ const generateAssetHash = (assets: string[]): number => {
   return Math.abs(hash);
 };
 
-// 2. Updated template accepting both version number and assets string array
+function* walkDir(dir: string): Generator<string> {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      yield* walkDir(fullPath);
+    } else {
+      yield fullPath;
+    }
+  }
+}
+
 const serviceWorkerContent = (versionNo: number, assets: string[]) => `
 const CACHE_NAME = "site-assets-v${versionNo}";
 
@@ -92,15 +107,53 @@ self.addEventListener("fetch", (event) => {
 `;
 
 const injectServiceWorker = async () => {
-  const {
-    productionPath,
-    serviceWorker: { precacheAssets },
-  } = appConfig();
-  const versionNo = generateAssetHash(precacheAssets);
+  const dynamicAssets: string[] = ["/"];
+  const CACHEABLE_EXTENSIONS = [
+    ".html",
+    ".css",
+    ".js",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".svg",
+    ".webp",
+    ".ico",
+    ".woff2",
+  ];
+
+  for (const filePath of walkDir(path.resolve(productionPath))) {
+    const fileName = path.basename(filePath).toLowerCase();
+    const ext = path.extname(filePath).toLowerCase();
+
+    if (fileName === "sw.js" || fileName === "rss.xml") {
+      continue;
+    }
+
+    if (CACHEABLE_EXTENSIONS.includes(ext)) {
+      let webPath =
+        "/" +
+        path
+          .relative(path.resolve(productionPath), filePath)
+          .replace(/\\/g, "/");
+
+      if (webPath.endsWith("/index.html")) {
+        webPath = webPath.slice(0, -11);
+        if (webPath === "") webPath = "/";
+      } else if (webPath.endsWith(".html")) {
+        webPath = webPath.slice(0, -5);
+      }
+
+      if (!dynamicAssets.includes(webPath)) {
+        dynamicAssets.push(webPath);
+      }
+    }
+  }
+
+  const versionNo = generateAssetHash(dynamicAssets);
 
   return createFile(
     `${productionPath}/sw.js`,
-    serviceWorkerContent(versionNo, precacheAssets),
+    serviceWorkerContent(versionNo, dynamicAssets),
   );
 };
 
