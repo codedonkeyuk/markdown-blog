@@ -17,7 +17,7 @@ const ASSET_EXTENSIONS = [
   ".ico",
   ".woff2",
 ];
-const TEXT_EXTENSIONS = [".html", ".css", ".js", ".xml"];
+const TEXT_EXTENSIONS = [".html", ".css", ".js", ".xml", ".webmanifest"];
 
 function* walkDir(dir: string): Generator<string> {
   const files = fs.readdirSync(dir);
