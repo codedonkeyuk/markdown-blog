@@ -32,6 +32,7 @@ describe("Test app.ts", () => {
   const minifySiteMock = mock.fn(async () => {});
   const injectServiceWorkerMock = mock.fn(async () => {});
   const rssFeedMock = mock.fn(async () => {});
+  const hashAssets = mock.fn(async () => {});
 
   beforeEach(() => {
     mock.module("./file-utils/delete-dir-contents.ts", {
@@ -58,6 +59,9 @@ describe("Test app.ts", () => {
     mock.module("./rss/rss-feed.ts", {
       namedExports: { default: rssFeedMock },
     });
+    mock.module("./hashing/hash-assets.ts", {
+      namedExports: { default: hashAssets },
+    });
   });
 
   afterEach(() => {
@@ -69,6 +73,7 @@ describe("Test app.ts", () => {
     minifySiteMock.mock.resetCalls();
     injectServiceWorkerMock.mock.resetCalls();
     rssFeedMock.mock.resetCalls();
+    hashAssets.mock.resetCalls();
     mock.restoreAll();
   });
 
@@ -81,6 +86,7 @@ describe("Test app.ts", () => {
     minifySiteMock.mock.mockImplementation(async () => {});
     injectServiceWorkerMock.mock.mockImplementation(async () => {});
     rssFeedMock.mock.mockImplementation(async () => {});
+    hashAssets.mock.mockImplementation(async () => {});
 
     await import(`./app.ts`);
 
@@ -92,6 +98,7 @@ describe("Test app.ts", () => {
     assert.strictEqual(minifySiteMock.mock.callCount(), 1);
     assert.strictEqual(injectServiceWorkerMock.mock.callCount(), 1);
     assert.strictEqual(rssFeedMock.mock.callCount(), 1);
+    assert.strictEqual(hashAssets.mock.callCount(), 1);
 
     assert.deepStrictEqual(
       (generatePostPagesMock.mock.calls as any)[0].arguments[0],

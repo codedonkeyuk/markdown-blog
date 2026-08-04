@@ -1,9 +1,9 @@
-import { type PostInfo } from "../types.ts";
+import { type PostInfo } from "../../blog-generation/types.ts";
 import { spellCheckDocument, type ValidationIssue } from "cspell-lib";
 import { resolve } from "path";
 
 import appConfig from "../../app-config.ts";
-import asyncPool from "../thread-management/async-pool.ts";
+import asyncPool from "../../blog-generation/thread-management/async-pool.ts";
 import { pathToFileURL } from "url";
 
 const customWords: string[] = ["enshittification"];

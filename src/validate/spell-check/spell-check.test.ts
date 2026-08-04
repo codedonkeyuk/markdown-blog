@@ -1,7 +1,6 @@
 import { test, describe, beforeEach, afterEach, mock } from "node:test";
 import assert from "node:assert/strict";
 
-// 1. Declare mock tracking tools globally
 const mockSpellCheckDocument = mock.fn(async () => ({ issues: [] as any[] }));
 const mockAsyncPool = mock.fn(
   async (items: any[], max: number, cb: Function) => {
@@ -11,18 +10,18 @@ const mockAsyncPool = mock.fn(
   },
 );
 
-// 2. Wrap mock configurations and function loading inside an async setup routine
 async function initializeMocks() {
-  // Fixed deprecation structure: namedExports converted to exports
   mock.module("cspell-lib", {
     exports: {
       spellCheckDocument: mockSpellCheckDocument,
     },
   });
 
-  // Fixed deprecation structure: defaultExport converted to exports.default
   mock.module(
-    new URL("../thread-management/async-pool.ts", import.meta.url).href,
+    new URL(
+      "../../blog-generation/thread-management/async-pool.ts",
+      import.meta.url,
+    ).href,
     {
       exports: {
         default: mockAsyncPool,
@@ -30,7 +29,6 @@ async function initializeMocks() {
     },
   );
 
-  // Fixed import issue: changed from named constants to a default config function export
   mock.module(new URL("../../app-config.ts", import.meta.url).href, {
     exports: {
       default: () => ({
@@ -40,9 +38,8 @@ async function initializeMocks() {
     },
   });
 
-  // Dynamic import forces Node's type stripper to load this file AFTER mocks take effect
   const module = await import("./spell-check.ts");
-  const typesModule = await import("../types.ts");
+  const typesModule = await import("../../blog-generation/types.ts");
 
   return {
     spellCheck: module.spellCheck,
@@ -50,7 +47,6 @@ async function initializeMocks() {
   };
 }
 
-// 3. Destructure and prepare your isolated test target environment
 const { spellCheck } = await initializeMocks();
 type PostInfo = any;
 
@@ -67,7 +63,6 @@ describe("spellCheck Native TypeScript Unit Test", () => {
     mockAsyncPool.mock.resetCalls();
     mockSpellCheckDocument.mock.resetCalls();
 
-    // Catch output pipelines cleanly
     mock.method(console, "log", (...args: any[]) => {
       logCalls.push(args);
     });

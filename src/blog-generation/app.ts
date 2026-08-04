@@ -8,7 +8,6 @@ import appConfig from "../app-config.ts";
 import minifySite from "./compression/minify-site.ts";
 import injectServiceWorker from "./service-worker/inject-service-worker.ts";
 import rssFeed from "./rss/rss-feed.ts";
-import { spellCheck } from "./validate/spell-check.ts";
 import hashAssets from "./hashing/hash-assets.ts";
 
 const { productionPath, siteSourcePath, blogProductionPath } = appConfig();
@@ -18,7 +17,6 @@ await copyFolderContents(siteSourcePath, productionPath);
 await deleteDirContents(blogProductionPath);
 
 const postInfo = await generatePostInfo();
-await spellCheck(postInfo);
 await Promise.all([
   generatePostPages(postInfo),
   generateIndexes(postInfo),
