@@ -3,7 +3,7 @@
 import htmlValidate from "./html/html-validate.ts";
 import appConfig from "../app-config.ts";
 import generatePostInfo from "../blog-generation/template/generate-post-info.ts";
-import { spellCheck } from "./spell-check/spell-check.ts";
+import spellCheck from "./spell-check/spell-check.ts";
 
 const { productionPath } = appConfig();
 

@@ -10,6 +10,26 @@ import {
 
 describe("Test html-validate-prod.ts", async () => {
   const htmlValidateMock = mock.fn() as Mock<(path: string) => Promise<string>>;
+  const spellCheckSpy = mock.fn();
+  const generatePostInfoSpy = mock.fn();
+
+  mock.module(
+    new URL(
+      "../blog-generation/template/generate-post-info.ts",
+      import.meta.url,
+    ).href,
+    {
+      exports: {
+        default: generatePostInfoSpy,
+      },
+    },
+  );
+
+  mock.module(new URL("./spell-check/spell-check.ts", import.meta.url).href, {
+    exports: {
+      default: spellCheckSpy,
+    },
+  });
 
   beforeEach(async () => {
     mock.module("./html/html-validate.ts", {
@@ -18,12 +38,16 @@ describe("Test html-validate-prod.ts", async () => {
   });
 
   afterEach(() => {
+    generatePostInfoSpy.mock.resetCalls();
+    spellCheckSpy.mock.resetCalls();
     htmlValidateMock.mock.resetCalls();
     mock.restoreAll();
   });
 
   test("Ensure html-validate is called, with correct arguements", async () => {
     await import("./validate-prod.ts");
+    assert.strictEqual(generatePostInfoSpy.mock.callCount(), 1);
+    assert.strictEqual(spellCheckSpy.mock.callCount(), 1);
     assert.strictEqual(htmlValidateMock.mock.callCount(), 1);
     assert.deepStrictEqual(htmlValidateMock.mock.calls[0].arguments, [
       "./tmp/site",

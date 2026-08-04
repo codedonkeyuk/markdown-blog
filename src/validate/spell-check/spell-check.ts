@@ -8,7 +8,7 @@ import { pathToFileURL } from "url";
 
 const customWords: string[] = ["enshittification"];
 
-export async function spellCheck(postInfo: PostInfo[]): Promise<void> {
+export default async function spellCheck(postInfo: PostInfo[]): Promise<void> {
   const { postSourcePath, maxParallelProcesses } = appConfig();
 
   let allIssues: (any[] | ValidationIssue)[] = [];

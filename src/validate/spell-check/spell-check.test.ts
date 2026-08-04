@@ -38,11 +38,11 @@ async function initializeMocks() {
     },
   });
 
-  const module = await import("./spell-check.ts");
+  const spellCheckModule = await import("./spell-check.ts");
   const typesModule = await import("../../blog-generation/types.ts");
 
   return {
-    spellCheck: module.spellCheck,
+    spellCheck: spellCheckModule.default as any,
     typePostInfo: typesModule as any,
   };
 }
