@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ogBlogConfig = {
+  author: "no author set, add to config file",
   siteSourcePath: "./src/site",
   postSourcePath: "./src/blog-content",
   productionPath: "./dist",
