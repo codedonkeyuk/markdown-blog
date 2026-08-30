@@ -81,16 +81,19 @@ describe("Test generate-post-pages.ts", async () => {
     convertSvgToPngContext = mock.module("../image/convert-svg-to-png.ts", {
       defaultExport: convertSvgToPngMock,
     });
-    appConfigContext = mock.module("../../app-config.ts", {
-      defaultExport: appConfigMock,
-    });
 
-    appConfigMock.mock.mockImplementation((path: string) => ({
+    const appConfigMock = {
       postSourcePath: "./src/blog/post",
       blogProductionPath: "./dist/blog",
       postPageTemplate: "./src/blog/post/post.html",
       maxParallelProcesses: 50,
-    }));
+    };
+
+    mock.module("../../app-config.ts", {
+      exports: {
+        default: appConfigMock,
+      },
+    });
   });
 
   afterEach(() => {

@@ -8,7 +8,7 @@ import {
 } from "html-minifier-terser";
 import appConfig from "../../app-config.ts";
 
-const { productionPath } = appConfig();
+const { productionPath } = appConfig;
 const DIST_DIR: string = path.resolve(productionPath);
 
 function getFilesRecursively(dir: string): string[] {

@@ -6,7 +6,7 @@ import readFile from "../file-utils/read-file.ts";
 
 const generatePostInfo = async (): Promise<PostInfo[]> => {
   const { blogProductionPath, postSourcePath, blogPath, maxParallelProcesses } =
-    appConfig();
+    appConfig;
   const directories = await readDirectories(postSourcePath);
 
   const allRawPosts = await asyncPool(

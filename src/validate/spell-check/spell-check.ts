@@ -6,10 +6,8 @@ import appConfig from "../../app-config.ts";
 import asyncPool from "../../blog-generation/thread-management/async-pool.ts";
 import { pathToFileURL } from "url";
 
-const customWords: string[] = ["enshittification"];
-
 export default async function spellCheck(postInfo: PostInfo[]): Promise<void> {
-  const { postSourcePath, maxParallelProcesses } = appConfig();
+  const { postSourcePath, maxParallelProcesses } = appConfig;
 
   let allIssues: (any[] | ValidationIssue)[] = [];
 
@@ -20,7 +18,7 @@ export default async function spellCheck(postInfo: PostInfo[]): Promise<void> {
     const result = await spellCheckDocument(
       { uri },
       { generateSuggestions: true, noConfigSearch: true },
-      { words: customWords, suggestionsTimeout: 2000 },
+      { words: appConfig.spellingExemptions, suggestionsTimeout: 2000 },
     );
 
     const contextualIssues = result.issues.map((issue) => ({

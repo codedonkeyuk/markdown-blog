@@ -4,7 +4,7 @@ import appConfig from "../app-config.ts";
 import createDir from "../blog-generation/file-utils/create-dir.ts";
 import createFile from "../blog-generation/file-utils/create-file.ts";
 
-const { postSourcePath, author } = appConfig();
+const { postSourcePath, author } = appConfig;
 
 const POST_IMAGE_TEMPLATE = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" version="1.1" id="svg26">

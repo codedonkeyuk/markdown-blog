@@ -7,7 +7,7 @@ const mockConfigValues = {
 
 mock.module(new URL("../app-config.ts", import.meta.url).href, {
   exports: {
-    default: () => mockConfigValues,
+    default: mockConfigValues,
   },
 });
 

@@ -5,8 +5,7 @@ import createIndexPage from "./create-index-page.ts";
 import appConfig from "../../app-config.ts";
 
 const generateIndexes = async (posts: PostInfo[]) => {
-  const { blogProductionPath, blogIndexPageTemplate, postsPerPage } =
-    appConfig();
+  const { blogProductionPath, blogIndexPageTemplate, postsPerPage } = appConfig;
   posts.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 
   const pageTemplate = await readFile(blogIndexPageTemplate);

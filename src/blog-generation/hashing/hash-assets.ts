@@ -3,7 +3,7 @@ import crypto from "crypto";
 import path from "path";
 import appConfig from "../../app-config.ts";
 
-const { productionPath: prodPath, siteAddress } = appConfig();
+const { productionPath: prodPath, siteAddress } = appConfig;
 const productionPath: string = path.resolve(prodPath);
 
 const ASSET_EXTENSIONS = [

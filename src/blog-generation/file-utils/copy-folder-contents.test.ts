@@ -26,11 +26,9 @@ describe("Copy Folder Contents Script Tests", () => {
     postPageTemplate: "./src/site/blog/post/post.html",
   };
 
-  const configUrl = new URL("../../app-config.ts", import.meta.url).href;
-
-  mock.module(configUrl, {
+  mock.module("../../app-config.ts", {
     exports: {
-      default: () => mockConfig,
+      default: mockConfig,
     },
   });
 

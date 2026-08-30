@@ -6,7 +6,7 @@ import appConfig from "../app-config.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const { productionPath } = appConfig();
+const { productionPath } = appConfig;
 process.argv.push(productionPath);
 
 const projectRoot = resolve(__dirname, "../../");

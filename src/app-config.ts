@@ -1,7 +1,26 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const ogBlogConfig = {
+interface BlogConfig {
+  author: string;
+  siteSourcePath: string;
+  postSourcePath: string;
+  productionPath: string;
+  postsPerPage: number;
+  blogPath: string;
+  maxParallelProcesses: number;
+  maxCompresionProcesses: number;
+  siteTitle: string;
+  siteAddress: string;
+  rssDescription: string;
+  rssPostLimit: number;
+  spellingExemptions: string[];
+  blogProductionPath: string;
+  blogIndexPageTemplate: string;
+  postPageTemplate: string;
+}
+
+const ogBlogConfig: BlogConfig = {
   author: "no author set, add to config file",
   siteSourcePath: "./src/site",
   postSourcePath: "./src/blog-content",
@@ -14,9 +33,13 @@ const ogBlogConfig = {
   siteAddress: "http://localhost:3001",
   rssDescription: "A web developers portfolio and blog.",
   rssPostLimit: 20,
+  spellingExemptions: [],
+  blogProductionPath: "",
+  blogIndexPageTemplate: "",
+  postPageTemplate: "",
 };
 
-export default function appConfig() {
+function appConfig(): BlogConfig {
   let userConfig: Record<string, any> = {};
 
   const rootDir = process.cwd();
@@ -39,7 +62,7 @@ export default function appConfig() {
   const mrgConfig = {
     ...ogBlogConfig,
     ...userConfig,
-  };
+  } as BlogConfig;
 
   return {
     ...mrgConfig,
@@ -48,3 +71,5 @@ export default function appConfig() {
     postPageTemplate: `${mrgConfig.siteSourcePath}/blog/post/post.html`,
   };
 }
+
+export default appConfig();

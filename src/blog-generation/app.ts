@@ -10,7 +10,7 @@ import injectServiceWorker from "./service-worker/inject-service-worker.ts";
 import rssFeed from "./rss/rss-feed.ts";
 import hashAssets from "./hashing/hash-assets.ts";
 
-const { productionPath, siteSourcePath, blogProductionPath } = appConfig();
+const { productionPath, siteSourcePath, blogProductionPath } = appConfig;
 
 await deleteDirContents(productionPath);
 await copyFolderContents(siteSourcePath, productionPath);

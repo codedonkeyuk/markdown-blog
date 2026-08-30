@@ -1,26 +1,48 @@
 import assert from "node:assert";
-import { afterEach, before, describe, mock, test } from "node:test";
+import { before, beforeEach, describe, mock, test } from "node:test";
 import fs from "node:fs";
-import getConfig from "./app-config.ts";
 
 describe("Configuration Tests", () => {
   let mockFileExists = true;
   let mockFileContent = "{}";
+  let counter = 0;
 
-  // 1. Stub the standard native filesystem methods once for the suite
+  const originalReadFileSync = fs.readFileSync;
+
+  async function getConfigFresh() {
+    const module = await import(`./app-config.ts?update=${counter++}`);
+
+    return typeof module.default === "function"
+      ? module.default()
+      : module.default;
+  }
+
   before(() => {
-    mock.method(fs, "existsSync", () => mockFileExists);
-    mock.method(fs, "readFileSync", () => mockFileContent);
+    mock.method(fs, "existsSync", (path: fs.PathLike) => {
+      if (
+        typeof path === "string" &&
+        (path.endsWith(".json") || !path.includes("src/"))
+      ) {
+        return mockFileExists;
+      }
+      return true;
+    });
+
+    mock.method(fs, "readFileSync", function (path: any, options: any) {
+      if (typeof path === "string" && path.endsWith(".json")) {
+        return mockFileContent;
+      }
+      return originalReadFileSync.apply(fs, [path, options]);
+    });
   });
 
-  // 2. Reset the states back to default before every single test
-  afterEach(() => {
+  beforeEach(() => {
     mockFileExists = true;
     mockFileContent = "{}";
   });
 
-  test("Configuration object contains all required base properties", () => {
-    const config = getConfig();
+  test("Configuration object contains all required base properties", async () => {
+    const config = await getConfigFresh();
     assert.ok(config, "The configuration object is undefined.");
 
     const expectedKeys = [
@@ -45,8 +67,8 @@ describe("Configuration Tests", () => {
     }
   });
 
-  test("Configuration object contains correctly derived path properties", () => {
-    const config = getConfig();
+  test("Configuration object contains correctly derived path properties", async () => {
+    const config = await getConfigFresh();
 
     assert.strictEqual(
       config.blogProductionPath,
@@ -62,25 +84,37 @@ describe("Configuration Tests", () => {
     );
   });
 
-  test("Configuration values can be custom mocked per test", () => {
-    // 3. Simply update your variables right in the test body!
+  test("Configuration values can be custom mocked per test", async () => {
     mockFileContent = JSON.stringify({
       siteTitle: "Moo",
       postsPerPage: 99,
     });
 
-    const config = getConfig();
+    const config = await getConfigFresh();
 
     assert.strictEqual(config.siteTitle, "Moo");
     assert.strictEqual(config.postsPerPage, 99);
   });
 
-  test("Falls back to defaults gracefully if file does not exist", () => {
+  test("Falls back to defaults gracefully if file does not exist", async () => {
     mockFileExists = false;
 
-    const config = getConfig();
+    const config = await getConfigFresh();
 
-    // Should fall back to the ogBlogConfig internal value
     assert.strictEqual(config.siteTitle, "Markdown Blog");
+  });
+
+  test("Throws an error if the configuration file has invalid JSON syntax", async () => {
+    mockFileContent = "{ invalid json: ... }";
+
+    await assert.rejects(
+      async () => {
+        await getConfigFresh();
+      },
+      (err: any) => {
+        return err instanceof Error;
+      },
+      "Expected appConfig to throw when parsing invalid JSON syntax.",
+    );
   });
 });

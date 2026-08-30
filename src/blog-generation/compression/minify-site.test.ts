@@ -27,7 +27,7 @@ describe("Minifier Script Tests", () => {
   // 2. CORRECTION: Change exports to provide the function as the 'default' key
   mock.module("../../app-config.ts", {
     exports: {
-      default: () => mockConfig,
+      default: mockConfig, // Provide the object directly, not a function returning it
     },
   });
 

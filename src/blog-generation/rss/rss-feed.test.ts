@@ -8,9 +8,9 @@ const mockConfigValues = {
   rssPostLimit: 20,
 };
 
-mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+mock.module("../../app-config.ts", {
   exports: {
-    default: () => mockConfigValues,
+    default: mockConfigValues,
   },
 });
 

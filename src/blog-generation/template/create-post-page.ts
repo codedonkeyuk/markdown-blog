@@ -8,7 +8,7 @@ const createPostPage = async (
   postContent: string,
   postInfo: PostInfo,
 ): Promise<string> => {
-  const { siteAddress, blogPath, siteTitle } = appConfig();
+  const { siteAddress, blogPath, siteTitle } = appConfig;
   const baseDirectory = `/${blogPath}/${postInfo.dateDirectory}/`;
 
   const renderedPostHtml = await markdownHtmlConvertor(

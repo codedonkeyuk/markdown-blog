@@ -8,17 +8,16 @@ import {
   type Mock,
 } from "node:test";
 
-// 1. Establish your mock config state function globally
-const mockConfigValues = {
+const appConfigMock = {
   blogProductionPath: "./dist/blog",
   postSourcePath: "./src/blog/post",
   blogPath: "blog",
   maxParallelProcesses: 50,
 };
 
-mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+mock.module("../../app-config.ts", {
   exports: {
-    default: () => mockConfigValues,
+    default: appConfigMock,
   },
 });
 

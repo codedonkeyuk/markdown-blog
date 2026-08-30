@@ -15,7 +15,7 @@ const generatePostPages = async (postInfo: PostInfo[]): Promise<void> => {
     blogProductionPath,
     postPageTemplate,
     maxParallelProcesses,
-  } = appConfig();
+  } = appConfig;
   const postTemplate = await readFile(postPageTemplate);
 
   await asyncPool(postInfo, maxParallelProcesses, async (post) => {

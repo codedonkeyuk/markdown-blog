@@ -25,7 +25,7 @@ describe("Asset Hashing Script Tests", () => {
 
   mock.module("../../app-config.ts", {
     exports: {
-      default: () => mockConfig,
+      default: mockConfig,
     },
   });
 

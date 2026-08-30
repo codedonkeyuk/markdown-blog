@@ -3,7 +3,7 @@ import path from "path";
 import createFile from "../file-utils/create-file.ts";
 import appConfig from "../../app-config.ts";
 
-const { productionPath } = appConfig();
+const { productionPath } = appConfig;
 
 const generateAssetHash = (assets: string[]): number => {
   const str = assets.join(",");

@@ -7,9 +7,9 @@ const mockConfig = {
   productionPath: "/mock/prod/path",
 };
 
-mock.module(new URL("../../app-config.ts", import.meta.url).href, {
+mock.module("../../app-config.ts", {
   exports: {
-    default: () => mockConfig,
+    default: mockConfig,
   },
 });
 

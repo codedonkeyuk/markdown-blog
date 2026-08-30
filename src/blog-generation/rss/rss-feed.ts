@@ -9,7 +9,7 @@ const rssFeed = async (posts: PostInfo[]): Promise<void> => {
     rssDescription,
     productionPath,
     rssPostLimit,
-  } = appConfig();
+  } = appConfig;
   const sortedPosts = [...posts]
     .sort((a, b) => b.creationTimestamp - a.creationTimestamp)
     .slice(0, rssPostLimit);

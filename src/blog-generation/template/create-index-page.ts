@@ -8,7 +8,7 @@ const createIndexPage = (
   pageNo: number,
   maxPage: number,
 ): string => {
-  const { siteTitle, siteAddress } = appConfig();
+  const { siteTitle, siteAddress } = appConfig;
   const pageNumber = pageNo + 1;
   const title = `${siteTitle} - Blog - Page ${pageNumber}`;
   const description = `List of Posts Page ${pageNumber}`;
@@ -31,7 +31,7 @@ const createIndexPage = (
       "",
     );
 
-    const { siteAddress, blogPath } = appConfig();
+    const { siteAddress, blogPath } = appConfig;
     const baseDirectory = `/${blogPath}/`;
 
     return pageTemplate

@@ -37,7 +37,7 @@ async function copyFolderContents(src: string, dest: string): Promise<void> {
 
   const allTasks = await gatherCopyTasks(src, dest);
 
-  const { maxParallelProcesses } = appConfig();
+  const { maxParallelProcesses } = appConfig;
 
   await asyncPool(allTasks, maxParallelProcesses, async (task) => {
     if (task.isDirectory) {
