@@ -32,7 +32,7 @@ const createPostPage = async (
     )
     .replace(
       templateParameterRegex("META-DESCRIPTION"),
-      `<meta property="description" content="${postInfo.pageDescription}" />`,
+      `<meta name="description" content="${postInfo.pageDescription}" />`,
     )
     .replace(
       templateParameterRegex("META-OG-IMAGE"),

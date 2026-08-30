@@ -51,7 +51,7 @@ const createIndexPage = (
       )
       .replace(
         templateParameterRegex("META-DESCRIPTION"),
-        `<meta property="description" content="${description}" />`,
+        `<meta name="description" content="${description}" />`,
       )
       .replace(
         templateParameterRegex("CANONICAL"),

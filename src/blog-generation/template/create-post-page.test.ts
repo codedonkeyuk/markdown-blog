@@ -81,7 +81,7 @@ test("createPostPage correctly replaces HTML comment template tags", async () =>
   );
   assert.match(
     result,
-    /<meta property="description" content="A great post about coding\."/,
+    /<meta name="description" content="A great post about coding\."/,
   );
   assert.match(
     result,

@@ -84,7 +84,7 @@ describe("Test create-index-page.ts", async () => {
     );
     assert(
       result.includes(
-        '<meta property="description" content="List of Posts Page 1" />',
+        '<meta name="description" content="List of Posts Page 1" />',
       ),
     );
     assert(result.includes("<title>Markdown Blog - Blog - Page 1</title>"));
