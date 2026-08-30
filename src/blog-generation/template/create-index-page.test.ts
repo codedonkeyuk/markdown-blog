@@ -12,6 +12,7 @@ describe("Test create-index-page.ts", async () => {
         <!--INJECT-META-OG-TITLE-START--><!--INJECT-META-OG-TITLE-END-->
         <!--INJECT-META-OG-DESCRIPTION-START--><!--INJECT-META-OG-DESCRIPTION-END-->
         <!--INJECT-TITLE-START--><!--INJECT-TITLE-END-->
+        <!--INJECT-META-DESCRIPTION-START--><!--INJECT-META-DESCRIPTION-END-->
         <!--INJECT-POSTS-START-->
           <!--INJECT-POST-TEMPLATE-THUMBNAIL-START--><!--INJECT-POST-TEMPLATE-THUMBNAIL-END-->
           <!--INJECT-POST-TEMPLATE-HEADING-START--><!--INJECT-POST-TEMPLATE-HEADING-END-->
@@ -79,6 +80,11 @@ describe("Test create-index-page.ts", async () => {
     assert(
       result.includes(
         '<meta property="og:description" content="List of Posts Page 1" />',
+      ),
+    );
+    assert(
+      result.includes(
+        '<meta property="description" content="List of Posts Page 1" />',
       ),
     );
     assert(result.includes("<title>Markdown Blog - Blog - Page 1</title>"));

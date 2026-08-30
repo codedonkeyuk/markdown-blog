@@ -50,6 +50,10 @@ const createIndexPage = (
         `<meta property="og:description" content="${description}" />`,
       )
       .replace(
+        templateParameterRegex("META-DESCRIPTION"),
+        `<meta property="description" content="${description}" />`,
+      )
+      .replace(
         templateParameterRegex("CANONICAL"),
         `<link rel="canonical" href="${siteAddress}/post/page${pageNumber}" />`,
       )
