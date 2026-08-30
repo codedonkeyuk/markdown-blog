@@ -82,26 +82,27 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((cachedResponse) => {
-        const networkFetch = fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse.status === 200) {
-              cache.put(event.request, networkResponse.clone());
-
-              event.waitUntil(trimCache(CACHE_NAME, 50));
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            if (event.request.headers.get("accept").includes("text/html")) {
-              return caches.match("/offline");
-            }
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+            trimCache(CACHE_NAME, 50);
           });
-
-        return cachedResponse || networkFetch;
-      });
-    }),
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          if (event.request.headers.get("accept")?.includes("text/html")) {
+            return caches.match("/offline");
+          }
+        });
+      }),
   );
 });
 `;
