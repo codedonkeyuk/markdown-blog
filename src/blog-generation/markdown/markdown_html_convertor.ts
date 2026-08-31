@@ -22,14 +22,14 @@ const markdownHtmlConvertor = async (
   html = html
     .replace(headerRegex, headerParse)
     .replace(orderedListRegex, orderedListParse)
-    .replace(bulletListRegex, bulletListParse);
+    .replace(bulletListRegex, bulletListParse)
+    .replace(tableRegex, tableParse);
 
   return html
     .split(/\r?\n/)
     .map((paragraph) => {
       return paragraph
         .replace(paragraphRegex, paragraphParse)
-        .replace(tableRegex, tableParse)
         .replace(imageRegex, (_: string, altText?: string, url?: string) =>
           imageParse(baseDirectory, _, altText, url),
         )
