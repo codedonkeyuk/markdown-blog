@@ -1,8 +1,6 @@
-// Matches the ENTIRE table block from the first row to the last row
 export const tableRegex = /^((?:\|.+[^\n]*\n?)+)$/gm;
 
 export const tableParse = (match: string): string => {
-  // Split into individual rows and remove empty ones
   const rows = match
     .trim()
     .split("\n")
@@ -10,46 +8,43 @@ export const tableParse = (match: string): string => {
     .filter(Boolean);
   if (rows.length < 2) return match;
 
+  // Filter out the syntax line (e.g., |---|---|) completely right away
+  const cleanRows = rows.filter((row) => !/^[|\s-]+$/.test(row));
+  if (cleanRows.length === 0) return match;
+
   let html = "<table>\n";
-  let openBody = false;
 
-  rows.forEach((row, index) => {
-    // Check if the current row or next row is the delimiter row (e.g. |---|)
-    const isDelimiter = /^[|\s-]+$/.test(row);
-    if (isDelimiter) return; // Skip the delimiter row completely
-
-    const cells = row
+  // 1. Handle the Header Row
+  const headerRow = cleanRows.shift();
+  if (headerRow) {
+    const headers = headerRow
       .replace(/^\||\|$/g, "")
       .split("|")
       .map((c) => c.trim());
+    html += "  <thead>\n    <tr>\n";
+    headers.forEach((cell) => {
+      html += `      <th>${cell}</th>\n`;
+    });
+    html += "    </tr>\n  </thead>\n";
+  }
 
-    // Look ahead to check if the next row is a delimiter (making this one a header)
-    const nextRow = rows[index + 1];
-    const isHeader = nextRow && /^[|\s-]+$/.test(nextRow.trim());
-
-    if (isHeader) {
-      html += "  <thead>\n    <tr>\n";
-      cells.forEach((cell) => {
-        html += `      <th>${cell}</th>\n`;
-      });
-      html += "    </tr>\n  </thead>\n";
-    } else {
-      if (!openBody) {
-        html += "  <tbody>\n";
-        openBody = true;
-      }
+  // 2. Handle the Data Rows
+  if (cleanRows.length > 0) {
+    html += "  <tbody>\n";
+    cleanRows.forEach((row) => {
+      const cells = row
+        .replace(/^\||\|$/g, "")
+        .split("|")
+        .map((c) => c.trim());
       html += "    <tr>\n";
       cells.forEach((cell) => {
         html += `      <td>${cell}</td>\n`;
       });
       html += "    </tr>\n";
-    }
-  });
-
-  if (openBody) {
+    });
     html += "  </tbody>\n";
   }
-  html += "</table>";
 
+  html += "</table>";
   return html;
 };
