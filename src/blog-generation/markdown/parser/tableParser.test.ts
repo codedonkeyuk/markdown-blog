@@ -12,6 +12,7 @@ test("Table Parser Integration", async (t) => {
     ].join("\n");
 
     const expectedHtml = [
+      '<div class="table-wrapper">',
       "<table>",
       "  <thead>",
       "    <tr>",
@@ -30,6 +31,7 @@ test("Table Parser Integration", async (t) => {
       "    </tr>",
       "  </tbody>",
       "</table>",
+      "</div>",
     ].join("\n");
 
     const result = markdownInput.replace(tableRegex, tableParse);
