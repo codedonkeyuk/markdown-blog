@@ -10,6 +10,7 @@ import {
   orderedListRegex,
   orderedListParse,
 } from "./parser/orderedListParser.ts";
+import { tableParse, tableRegex } from "./parser/tableParser.ts";
 import { parseCodeBlocks } from "./parser/codeParser.ts";
 
 const markdownHtmlConvertor = async (
@@ -28,6 +29,7 @@ const markdownHtmlConvertor = async (
     .map((paragraph) => {
       return paragraph
         .replace(paragraphRegex, paragraphParse)
+        .replace(tableRegex, tableParse)
         .replace(imageRegex, (_: string, altText?: string, url?: string) =>
           imageParse(baseDirectory, _, altText, url),
         )

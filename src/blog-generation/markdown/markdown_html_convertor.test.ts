@@ -1,9 +1,5 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert";
-import type {
-  orderedListParse,
-  orderedListRegex,
-} from "./parser/orderedListParser.ts";
 
 const boldParseSpy = mock.fn(() => "bold-replaced");
 const underlineParseSpy = mock.fn(() => "underline-replaced");
@@ -12,6 +8,7 @@ const headerParseSpy = mock.fn(() => "header-replaced");
 const imageParseSpy = mock.fn(() => "image-replaced");
 const bulletListParseSpy = mock.fn(() => "bullet-list-replaced");
 const orderedListParseSpy = mock.fn(() => "ordered-list-replaced");
+const tableParseSpy = mock.fn(() => "table-replaced");
 
 mock.module("./parser/boldParser.ts", {
   namedExports: { boldRegex: /_BOLD_/g, boldParse: boldParseSpy },
@@ -53,18 +50,25 @@ mock.module("./parser/orderedListParser.ts", {
   },
 });
 
+mock.module("./parser/tableParser.ts", {
+  namedExports: {
+    tableRegex: /_TABLE_/g,
+    tableParse: tableParseSpy,
+  },
+});
+
 const { default: markdownHtmlConvertor } =
   await import("./markdown_html_convertor.ts");
 
 describe("Markdown HTML Converter Unit Test", () => {
   it("should invoke every single replacement method in the pipeline sequence", async () => {
-    const input = `_HEADER_ _BOLD_ _UNDERLINE_ _ITALIC_ _LINK_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_`;
+    const input = `_HEADER_ _BOLD_ _UNDERLINE_ _ITALIC_ _LINK_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_ _TABLE_`;
 
     const results = await markdownHtmlConvertor("/images/", input);
 
     assert.strictEqual(
       results,
-      "header-replaced bold-replaced underline-replaced italic-replaced [link-replaced] [paragraph-replaced] image-replaced bullet-list-replaced ordered-list-replaced",
+      "header-replaced bold-replaced underline-replaced italic-replaced [link-replaced] [paragraph-replaced] image-replaced bullet-list-replaced ordered-list-replaced table-replaced",
     );
 
     assert.strictEqual(boldParseSpy.mock.callCount(), 1);
@@ -74,5 +78,6 @@ describe("Markdown HTML Converter Unit Test", () => {
     assert.strictEqual(imageParseSpy.mock.callCount(), 1);
     assert.strictEqual(bulletListParseSpy.mock.callCount(), 1);
     assert.strictEqual(orderedListParseSpy.mock.callCount(), 1);
+    assert.strictEqual(tableParseSpy.mock.callCount(), 1);
   });
 });
