@@ -28,6 +28,23 @@ const markdownHtmlConvertor = async (
   return html
     .split(/\r?\n/)
     .map((paragraph) => {
+      const trimmed = paragraph.trim();
+
+      if (
+        trimmed.startsWith("<table") ||
+        trimmed.startsWith("</table") ||
+        trimmed.startsWith("<thead") ||
+        trimmed.startsWith("</thead") ||
+        trimmed.startsWith("<tbody") ||
+        trimmed.startsWith("</tbody") ||
+        trimmed.startsWith("<tr") ||
+        trimmed.startsWith("</tr") ||
+        trimmed.startsWith("<th") ||
+        trimmed.startsWith("<td")
+      ) {
+        return paragraph;
+      }
+
       return paragraph
         .replace(paragraphRegex, paragraphParse)
         .replace(imageRegex, (_: string, altText?: string, url?: string) =>
