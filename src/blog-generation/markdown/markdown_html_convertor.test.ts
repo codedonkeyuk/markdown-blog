@@ -1,35 +1,16 @@
 import { describe, it, mock } from "node:test";
 import assert from "node:assert";
 
-const boldParseSpy = mock.fn(() => "bold-replaced");
-const underlineParseSpy = mock.fn(() => "underline-replaced");
-const italicParseSpy = mock.fn(() => "italic-replaced");
 const headerParseSpy = mock.fn(() => "header-replaced");
 const imageParseSpy = mock.fn(() => "image-replaced");
 const bulletListParseSpy = mock.fn(() => "bullet-list-replaced");
 const orderedListParseSpy = mock.fn(() => "ordered-list-replaced");
 const tableParseSpy = mock.fn(() => "table-replaced");
 
-mock.module("./parser/boldParser.ts", {
-  namedExports: { boldRegex: /_BOLD_/g, boldParse: boldParseSpy },
-});
-mock.module("./parser/underlineParser.ts", {
-  namedExports: {
-    underlineRegex: /_UNDERLINE_/g,
-    underlineParse: underlineParseSpy,
-  },
-});
-mock.module("./parser/italicParser.ts", {
-  namedExports: { italicRegex: /_ITALIC_/g, italicParse: italicParseSpy },
-});
-
-mock.module("./parser/linkParser.ts", {
-  namedExports: { linkRegex: /_LINK_/g, linkParse: "[link-replaced]" },
-});
 mock.module("./parser/paragraphParser.ts", {
   namedExports: {
     paragraphRegex: /_PARAGRAPH_/g,
-    paragraphParse: "[paragraph-replaced]",
+    paragraphParse: "paragraph-replaced",
   },
 });
 mock.module("./parser/headerParser.ts", {
@@ -63,18 +44,14 @@ const { default: markdownHtmlConvertor } =
 
 describe("Markdown HTML Converter Unit Test", () => {
   it("should invoke every single replacement method in the pipeline sequence", async () => {
-    const input = `_HEADER_ _BOLD_ _UNDERLINE_ _ITALIC_ _LINK_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_ _TABLE_`;
+    const input = `_HEADER_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_ _TABLE_`;
 
     const results = await markdownHtmlConvertor("/images/", input);
 
     assert.strictEqual(
       results,
-      "header-replaced bold-replaced underline-replaced italic-replaced [link-replaced] [paragraph-replaced] image-replaced bullet-list-replaced ordered-list-replaced table-replaced",
+      "header-replaced paragraph-replaced image-replaced bullet-list-replaced ordered-list-replaced table-replaced",
     );
-
-    assert.strictEqual(boldParseSpy.mock.callCount(), 1);
-    assert.strictEqual(underlineParseSpy.mock.callCount(), 1);
-    assert.strictEqual(italicParseSpy.mock.callCount(), 1);
     assert.strictEqual(headerParseSpy.mock.callCount(), 1);
     assert.strictEqual(imageParseSpy.mock.callCount(), 1);
     assert.strictEqual(bulletListParseSpy.mock.callCount(), 1);

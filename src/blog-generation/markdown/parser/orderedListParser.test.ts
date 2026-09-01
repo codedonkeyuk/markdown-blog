@@ -21,13 +21,5 @@ describe("Ordered List Parser Module", () => {
         "<ol>\n<li>Level 1\n<ol>\n<li>Level 2</li>\n</ol>\n</li>\n<li>Back to Level 1</li>\n</ol>";
       assert.strictEqual(output, expected);
     });
-
-    it("should escape HTML special characters in the list content", () => {
-      const input = '1. Item with <brackets> & "quotes"';
-      const output = input.replace(orderedListRegex, orderedListParse);
-      const expected =
-        "<ol>\n<li>Item with &lt;brackets&gt; &amp; &quot;quotes&quot;</li>\n</ol>";
-      assert.strictEqual(output, expected);
-    });
   });
 });

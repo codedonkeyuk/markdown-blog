@@ -1,4 +1,4 @@
-import { escapeHtml } from "./escapeHtmlParser.ts";
+import textParser from "./textParser.ts";
 
 export const tableRegex = /^((?:\|.+[^\n]*\n?)+)$/gm;
 
@@ -22,7 +22,7 @@ export const tableParse = (match: string): string => {
   const headers = headerRow
     .replace(/^\||\|$/g, "")
     .split("|")
-    .map((c) => escapeHtml(c));
+    .map((c) => textParser(c));
   headers.forEach((cell) => {
     html += `      <th>${cell}</th>\n`;
   });
@@ -36,7 +36,7 @@ export const tableParse = (match: string): string => {
       const cells = row
         .replace(/^\||\|$/g, "")
         .split("|")
-        .map((c) => escapeHtml(c));
+        .map((c) => textParser(c));
 
       html += "    <tr>\n";
       cells.forEach((cell) => {

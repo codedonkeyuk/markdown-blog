@@ -1,4 +1,4 @@
-import { escapeHtml } from "./escapeHtmlParser.ts";
+import textParser from "./textParser.ts";
 
 export const orderedListRegex =
   /^[ \t]*\d+[.)]\s+.+(?:\n[ \t]*\d+[.)]\s+.+)*/gm;
@@ -13,7 +13,7 @@ export const orderedListParse = (match: string): string => {
     if (!lineMatch) continue;
 
     const [, indentation, content] = lineMatch;
-    const escapedContent = escapeHtml(content);
+    const escapedContent = textParser(content);
 
     const currentIndent = indentation.replace(/\t/g, "  ").length;
     const lastIndent = indentStack[indentStack.length - 1];

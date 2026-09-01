@@ -44,12 +44,5 @@ describe("Bullet List Parser Module", () => {
         "<ul>\n<li>Asterisk\n<ul>\n<li>Dash\n<ul>\n<li>Plus</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>";
       assert.strictEqual(output, expected);
     });
-    it("should escape HTML special characters in the content", () => {
-      const input = "* Item with <brackets> and & symbols";
-      const output = input.replace(bulletListRegex, bulletListParse);
-      const expected =
-        "<ul>\n<li>Item with &lt;brackets&gt; and &amp; symbols</li>\n</ul>";
-      assert.strictEqual(output, expected);
-    });
   });
 });

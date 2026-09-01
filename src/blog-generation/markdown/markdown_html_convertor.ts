@@ -1,7 +1,3 @@
-import { boldRegex, boldParse } from "./parser/boldParser.ts";
-import { underlineRegex, underlineParse } from "./parser/underlineParser.ts";
-import { italicRegex, italicParse } from "./parser/italicParser.ts";
-import { linkRegex, linkParse } from "./parser/linkParser.ts";
 import { paragraphRegex, paragraphParse } from "./parser/paragraphParser.ts";
 import { headerParse, headerRegex } from "./parser/headerParser.ts";
 import { imageParse, imageRegex } from "./parser/imageParser.ts";
@@ -23,7 +19,10 @@ const markdownHtmlConvertor = async (
     .replace(headerRegex, headerParse)
     .replace(orderedListRegex, orderedListParse)
     .replace(bulletListRegex, bulletListParse)
-    .replace(tableRegex, tableParse);
+    .replace(tableRegex, tableParse)
+    .replace(imageRegex, (_: string, altText?: string, url?: string) =>
+      imageParse(baseDirectory, _, altText, url),
+    );
 
   return html
     .split(/\r?\n/)
@@ -45,15 +44,7 @@ const markdownHtmlConvertor = async (
         return paragraph;
       }
 
-      return paragraph
-        .replace(paragraphRegex, paragraphParse)
-        .replace(imageRegex, (_: string, altText?: string, url?: string) =>
-          imageParse(baseDirectory, _, altText, url),
-        )
-        .replace(linkRegex, linkParse)
-        .replace(boldRegex, boldParse)
-        .replace(italicRegex, italicParse)
-        .replace(underlineRegex, underlineParse);
+      return paragraph.replace(paragraphRegex, paragraphParse);
     })
     .join("\n");
 };

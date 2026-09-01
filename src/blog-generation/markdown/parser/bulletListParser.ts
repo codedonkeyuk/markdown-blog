@@ -1,4 +1,4 @@
-import { escapeHtml } from "./escapeHtmlParser.ts";
+import textParcer from "./textParser.ts";
 
 export const bulletListRegex = /^[ \t]*[*+-]\s+.+(?:\n[ \t]*[*+-]\s+.+)*/gm;
 
@@ -12,7 +12,7 @@ export const bulletListParse = (match: string): string => {
     if (!lineMatch) continue;
 
     const [, indentation, content] = lineMatch;
-    const escapedContent = escapeHtml(content);
+    const escapedContent = textParcer(content);
     const currentIndent = indentation.replace(/\t/g, "  ").length;
     const lastIndent = indentStack[indentStack.length - 1];
 
