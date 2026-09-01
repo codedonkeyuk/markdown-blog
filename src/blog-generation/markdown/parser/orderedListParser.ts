@@ -1,3 +1,5 @@
+import { escapeHtml } from "./escapeHtmlParser.ts";
+
 export const orderedListRegex =
   /^[ \t]*\d+[.)]\s+.+(?:\n[ \t]*\d+[.)]\s+.+)*/gm;
 
@@ -11,14 +13,15 @@ export const orderedListParse = (match: string): string => {
     if (!lineMatch) continue;
 
     const [, indentation, content] = lineMatch;
+    const escapedContent = escapeHtml(content);
+
     const currentIndent = indentation.replace(/\t/g, "  ").length;
     const lastIndent = indentStack[indentStack.length - 1];
 
     if (currentIndent > lastIndent) {
       indentStack.push(currentIndent);
-      // Remove closing tag from previous line to nest this sub-list inside it cleanly
       html = html.trimEnd().replace(/<\/li>$/, "");
-      html += "\n<ol>\n<li>" + content + "</li>";
+      html += "\n<ol>\n<li>" + escapedContent + "</li>";
     } else if (currentIndent < lastIndent) {
       while (
         indentStack.length > 1 &&
@@ -27,9 +30,9 @@ export const orderedListParse = (match: string): string => {
         indentStack.pop();
         html += "\n</ol>\n</li>";
       }
-      html += "\n<li>" + content + "</li>";
+      html += "\n<li>" + escapedContent + "</li>";
     } else {
-      html += (i === 0 ? "" : "\n") + "<li>" + content + "</li>";
+      html += (i === 0 ? "" : "\n") + "<li>" + escapedContent + "</li>";
     }
   }
 

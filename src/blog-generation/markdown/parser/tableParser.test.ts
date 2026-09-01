@@ -38,4 +38,38 @@ test("Table Parser Integration", async (t) => {
 
     assert.strictEqual(result.trim(), expectedHtml.trim());
   });
+
+  await t.test("should escape special HTML characters in cells", () => {
+    const markdownInput = [
+      "| Name | Description |",
+      "| --- | --- |",
+      "| <Script> | & Rock & Roll |",
+      '| "Quotes" | O\'Reilly |',
+    ].join("\n");
+    const expectedHtml = [
+      '<div class="table-wrapper">',
+      "<table>",
+      "  <thead>",
+      "    <tr>",
+      "      <th>Name</th>",
+      "      <th>Description</th>",
+      "    </tr>",
+      "  </thead>",
+      "  <tbody>",
+      "    <tr>",
+      "      <td>&lt;Script&gt;</td>",
+      "      <td>&amp; Rock &amp; Roll</td>",
+      "    </tr>",
+      "    <tr>",
+      "      <td>&quot;Quotes&quot;</td>",
+      "      <td>O&#39;Reilly</td>",
+      "    </tr>",
+      "  </tbody>",
+      "</table>",
+      "</div>",
+    ].join("\n");
+
+    const result = markdownInput.replace(tableRegex, tableParse);
+    assert.strictEqual(result.trim(), expectedHtml.trim());
+  });
 });
