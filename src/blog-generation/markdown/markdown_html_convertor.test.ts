@@ -44,13 +44,20 @@ const { default: markdownHtmlConvertor } =
 
 describe("Markdown HTML Converter Unit Test", () => {
   it("should invoke every single replacement method in the pipeline sequence", async () => {
-    const input = `_HEADER_ _PARAGRAPH_ _IMAGE_ _BULLET_LIST_ _ORDERED_LIST_ _TABLE_`;
+    const input = [
+      "_HEADER_",
+      "_PARAGRAPH_",
+      "_IMAGE_",
+      "_BULLET_LIST_",
+      "_ORDERED_LIST_",
+      "_TABLE_",
+    ].join("\n\n");
 
     const results = await markdownHtmlConvertor("/images/", input);
 
     assert.strictEqual(
       results,
-      "header-replaced paragraph-replaced image-replaced bullet-list-replaced ordered-list-replaced table-replaced",
+      "header-replaced\n\nparagraph-replaced\n\nimage-replaced\n\nbullet-list-replaced\n\nordered-list-replaced\n\ntable-replaced",
     );
     assert.strictEqual(headerParseSpy.mock.callCount(), 1);
     assert.strictEqual(imageParseSpy.mock.callCount(), 1);

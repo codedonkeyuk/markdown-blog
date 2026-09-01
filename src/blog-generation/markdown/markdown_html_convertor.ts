@@ -9,44 +9,51 @@ import {
 import { tableParse, tableRegex } from "./parser/tableParser.ts";
 import { parseCodeBlocks } from "./parser/codeParser.ts";
 
+/**
+ * Converts a markdown file to an HTML file. Follows the CommonMark standard \n\n for new section.
+ * @param baseDirectory
+ * @param markdown
+ * @returns
+ */
 const markdownHtmlConvertor = async (
   baseDirectory: string,
   markdown: string,
 ): Promise<string> => {
-  let html = await parseCodeBlocks(markdown);
+  const rawHtml = await parseCodeBlocks(markdown);
 
-  html = html
-    .replace(headerRegex, headerParse)
-    .replace(orderedListRegex, orderedListParse)
-    .replace(bulletListRegex, bulletListParse)
-    .replace(tableRegex, tableParse)
-    .replace(imageRegex, (_: string, altText?: string, url?: string) =>
-      imageParse(baseDirectory, _, altText, url),
-    );
+  const blocks = rawHtml.split(/\n{2,}/);
+  const processedBlocks: string[] = [];
 
-  return html
-    .split(/\r?\n/)
-    .map((paragraph) => {
-      const trimmed = paragraph.trim();
+  for (const block of blocks) {
+    const trimmedBlock = block.trim();
+    if (!trimmedBlock) continue;
 
-      if (
-        trimmed.startsWith("<table") ||
-        trimmed.startsWith("</table") ||
-        trimmed.startsWith("<thead") ||
-        trimmed.startsWith("</thead") ||
-        trimmed.startsWith("<tbody") ||
-        trimmed.startsWith("</tbody") ||
-        trimmed.startsWith("<tr") ||
-        trimmed.startsWith("</tr") ||
-        trimmed.startsWith("<th") ||
-        trimmed.startsWith("<td")
-      ) {
-        return paragraph;
-      }
+    if (headerRegex.test(trimmedBlock)) {
+      processedBlocks.push(trimmedBlock.replace(headerRegex, headerParse));
+    } else if (tableRegex.test(trimmedBlock)) {
+      processedBlocks.push(trimmedBlock.replace(tableRegex, tableParse));
+    } else if (bulletListRegex.test(trimmedBlock)) {
+      processedBlocks.push(
+        trimmedBlock.replace(bulletListRegex, bulletListParse),
+      );
+    } else if (orderedListRegex.test(trimmedBlock)) {
+      processedBlocks.push(
+        trimmedBlock.replace(orderedListRegex, orderedListParse),
+      );
+    } else if (imageRegex.test(trimmedBlock)) {
+      processedBlocks.push(
+        trimmedBlock.replace(imageRegex, (_, altText, url) =>
+          imageParse(baseDirectory, _, altText, url),
+        ),
+      );
+    } else {
+      processedBlocks.push(
+        trimmedBlock.replace(paragraphRegex, paragraphParse),
+      );
+    }
+  }
 
-      return paragraph.replace(paragraphRegex, paragraphParse);
-    })
-    .join("\n");
+  return processedBlocks.join("\n\n");
 };
 
 export default markdownHtmlConvertor;
