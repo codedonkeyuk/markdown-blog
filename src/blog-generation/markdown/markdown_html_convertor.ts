@@ -12,7 +12,6 @@ import {
 } from "./parser/orderedListParser.ts";
 import { tableParse, tableRegex } from "./parser/tableParser.ts";
 import { parseCodeBlocks } from "./parser/codeParser.ts";
-import { escapeHtmlParse, escapeHtmlRegex } from "./parser/escapeHtmlParser.ts";
 
 const markdownHtmlConvertor = async (
   baseDirectory: string,
@@ -54,8 +53,7 @@ const markdownHtmlConvertor = async (
         .replace(linkRegex, linkParse)
         .replace(boldRegex, boldParse)
         .replace(italicRegex, italicParse)
-        .replace(underlineRegex, underlineParse)
-        .replace(escapeHtmlRegex, escapeHtmlParse);
+        .replace(underlineRegex, underlineParse);
     })
     .join("\n");
 };

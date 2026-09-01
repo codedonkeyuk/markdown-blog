@@ -18,6 +18,16 @@ describe("Line-Based Paragraph Parser Module", () => {
       assert.strictEqual(output, "   ");
     });
 
+    it("should escape HTML special characters in the content", () => {
+      const input = "If 5 < 10 & 10 > 5, it is true.";
+      const output = input.replace(paragraphRegex, paragraphParse);
+
+      assert.strictEqual(
+        output,
+        "<p>If 5 &lt; 10 &amp; 10 &gt; 5, it is true.</p>",
+      );
+    });
+
     it("should completely skip lines that begin with an HTML tag structure (<)", () => {
       const inputs = [
         "<ul>",
