@@ -1,9 +1,15 @@
-import fs from "fs";
+import fs from "fs/promises";
+import fsSync from "fs"; // Kept for the synchronous generator
 import crypto from "crypto";
 import path from "path";
 import appConfig from "../../app-config.ts";
+import asyncPool from "../thread-management/async-pool.ts";
 
-const { productionPath: prodPath, siteAddress } = appConfig;
+const {
+  productionPath: prodPath,
+  siteAddress,
+  maxParallelProcesses,
+} = appConfig;
 const productionPath: string = path.resolve(prodPath);
 
 const ASSET_EXTENSIONS = [
@@ -20,10 +26,10 @@ const ASSET_EXTENSIONS = [
 const TEXT_EXTENSIONS = [".html", ".css", ".js", ".xml", ".webmanifest"];
 
 function* walkDir(dir: string): Generator<string> {
-  const files = fs.readdirSync(dir);
+  const files = fsSync.readdirSync(dir);
   for (const file of files) {
     const fullPath = path.join(dir, file);
-    if (fs.statSync(fullPath).isDirectory()) {
+    if (fsSync.statSync(fullPath).isDirectory()) {
       yield* walkDir(fullPath);
     } else {
       yield fullPath;
@@ -35,13 +41,11 @@ export default async function hashAssets() {
   const assetHashMap = new Map<string, string>();
   const filesToDelete: string[] = [];
   const textFiles: string[] = [];
+  const assetsToHash: string[] = [];
 
   for (const filePath of walkDir(productionPath)) {
     const ext = path.extname(filePath).toLowerCase();
-    const dir = path.dirname(filePath);
-    const baseName = path.basename(filePath, ext);
     const fileName = path.basename(filePath).toLowerCase();
-
     let relativeWebPath =
       "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
 
@@ -49,33 +53,41 @@ export default async function hashAssets() {
       textFiles.push(filePath);
       continue;
     }
-
     if (TEXT_EXTENSIONS.includes(ext)) {
       textFiles.push(filePath);
     }
-
     if (relativeWebPath.toLowerCase().includes("/lib/")) {
       continue;
     }
-
     if (ASSET_EXTENSIONS.includes(ext) && ext !== ".html" && ext !== ".xml") {
-      const fileBuffer = fs.readFileSync(filePath);
-      const hash = crypto
-        .createHash("md5")
-        .update(fileBuffer)
-        .digest("hex")
-        .substring(0, 8);
-
-      const newFileName = `${baseName}.${hash}${ext}`;
-      const newFilePath = path.join(dir, newFileName);
-      const newRelativeWebPath =
-        "/" + path.relative(productionPath, newFilePath).replace(/\\/g, "/");
-
-      fs.writeFileSync(newFilePath, fileBuffer);
-      assetHashMap.set(relativeWebPath.toLowerCase(), newRelativeWebPath);
-      filesToDelete.push(filePath);
+      assetsToHash.push(filePath);
     }
   }
+
+  await asyncPool(assetsToHash, maxParallelProcesses, async (filePath) => {
+    const ext = path.extname(filePath).toLowerCase();
+    const dir = path.dirname(filePath);
+    const baseName = path.basename(filePath, ext);
+    let relativeWebPath =
+      "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
+
+    const fileBuffer = await fs.readFile(filePath);
+    const hash = crypto
+      .createHash("md5")
+      .update(fileBuffer)
+      .digest("hex")
+      .substring(0, 8);
+
+    const newFileName = `${baseName}.${hash}${ext}`;
+    const newFilePath = path.join(dir, newFileName);
+    const newRelativeWebPath =
+      "/" + path.relative(productionPath, newFilePath).replace(/\\/g, "/");
+
+    await fs.writeFile(newFilePath, fileBuffer);
+
+    assetHashMap.set(relativeWebPath.toLowerCase(), newRelativeWebPath);
+    filesToDelete.push(filePath);
+  });
 
   const sortedAssets = Array.from(assetHashMap.keys()).sort(
     (a, b) => b.length - a.length,
@@ -83,11 +95,11 @@ export default async function hashAssets() {
   const cleanDomain = siteAddress.replace(/\/$/, "");
   const escapedDomain = cleanDomain.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 
-  for (let i = 0; i < textFiles.length; i++) {
-    let filePath = textFiles[i];
-
+  await asyncPool(textFiles, 10, async (originalFilePath) => {
+    let filePath = originalFilePath;
     let relativeWebPath =
       "/" + path.relative(productionPath, filePath).replace(/\\/g, "/");
+
     if (assetHashMap.has(relativeWebPath.toLowerCase())) {
       filePath = path.join(
         productionPath,
@@ -95,9 +107,13 @@ export default async function hashAssets() {
       );
     }
 
-    if (!fs.existsSync(filePath)) continue;
+    try {
+      await fs.access(filePath);
+    } catch {
+      return;
+    }
 
-    let originalContent = fs.readFileSync(filePath, "utf8");
+    let originalContent = await fs.readFile(filePath, "utf8");
     let content = originalContent;
 
     for (const originalPath of sortedAssets) {
@@ -156,15 +172,15 @@ export default async function hashAssets() {
     }
 
     if (content !== originalContent) {
-      fs.writeFileSync(filePath, content, "utf8");
+      await fs.writeFile(filePath, content, "utf8");
     }
-  }
+  });
 
-  for (const oldPath of filesToDelete) {
-    if (fs.existsSync(oldPath)) {
-      fs.unlinkSync(oldPath);
-    }
-  }
+  await asyncPool(filesToDelete, maxParallelProcesses, async (oldPath) => {
+    try {
+      await fs.unlink(oldPath);
+    } catch {}
+  });
 
   console.log(
     `\x1b[32m✔\x1b[0m Physical cache busting applied to ${assetHashMap.size} dependencies.`,
