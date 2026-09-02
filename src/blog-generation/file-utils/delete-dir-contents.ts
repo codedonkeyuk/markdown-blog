@@ -1,5 +1,7 @@
 import { promises as fs } from "fs";
 import * as path from "path";
+import appConfig from "../../app-config.ts";
+import asyncPool from "../thread-management/async-pool.ts";
 
 async function deleteDirContents(dirPath: string): Promise<void> {
   try {
@@ -7,14 +9,17 @@ async function deleteDirContents(dirPath: string): Promise<void> {
 
     const items = await fs.readdir(dirPath);
 
-    for (const item of items) {
-      if (item === ".git" || item.startsWith(".git")) {
-        continue;
-      }
+    const targets = items.filter((item) => {
+      return item !== ".git" && !item.startsWith(".git");
+    });
 
-      const fullPath = path.join(dirPath, item);
+    const fullPaths = targets.map((item) => path.join(dirPath, item));
+
+    const { maxCompresionProcesses } = appConfig;
+
+    await asyncPool(fullPaths, maxCompresionProcesses, async (fullPath) => {
       await fs.rm(fullPath, { recursive: true, force: true });
-    }
+    });
   } catch (error) {
     console.error(`Failed to clean directory ${dirPath}:`, error);
     throw error;
