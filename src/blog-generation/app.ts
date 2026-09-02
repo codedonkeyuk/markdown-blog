@@ -17,12 +17,10 @@ await copyFolderContents(siteSourcePath, productionPath);
 await deleteDirContents(blogProductionPath);
 
 const postInfo = await generatePostInfo();
-await Promise.all([
-  generatePostPages(postInfo),
-  generateIndexes(postInfo),
-  injectServiceWorker(),
-  rssFeed(postInfo),
-]);
+await generatePostPages(postInfo);
+await generateIndexes(postInfo);
+
+await Promise.all([injectServiceWorker(), rssFeed(postInfo)]);
 
 await hashAssets();
 
