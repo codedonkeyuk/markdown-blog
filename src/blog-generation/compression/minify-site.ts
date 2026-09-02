@@ -1,24 +1,26 @@
-import * as fs from "fs";
+import * as fs from "fs/promises";
+import * as fsSync from "fs"; // Kept for the synchronous directory scanner
 import * as path from "path";
 import { minify as minifyJS, type MinifyOptions } from "terser";
-import * as lightningcss from "lightningcss"; // 1. Swapped out CleanCSS
+import * as lightningcss from "lightningcss";
 import {
   minify as minifyHTML,
   type Options as HTMLMinifyOptions,
 } from "html-minifier-terser";
 import appConfig from "../../app-config.ts";
+import asyncPool from "../thread-management/async-pool.ts";
 
-const { productionPath } = appConfig;
+const { productionPath, maxParallelProcesses } = appConfig;
 const DIST_DIR: string = path.resolve(productionPath);
 
 function getFilesRecursively(dir: string): string[] {
   let results: string[] = [];
-  if (!fs.existsSync(dir)) return results;
+  if (!fsSync.existsSync(dir)) return results;
 
-  const list = fs.readdirSync(dir);
+  const list = fsSync.readdirSync(dir);
   for (const file of list) {
     const fullPath = path.join(dir, file);
-    const stat = fs.statSync(fullPath);
+    const stat = fsSync.statSync(fullPath);
 
     if (stat && stat.isDirectory()) {
       results = results.concat(getFilesRecursively(fullPath));
@@ -38,30 +40,30 @@ async function minifySite(): Promise<void> {
   let htmlCount = 0;
 
   try {
-    for (const filePath of allFiles) {
+    await asyncPool(allFiles, maxParallelProcesses, async (filePath) => {
       const ext = path.extname(filePath).toLowerCase();
 
       if (ext === ".js") {
-        const originalCode = fs.readFileSync(filePath, "utf8");
+        const originalCode = await fs.readFile(filePath, "utf8");
         const jsOptions: MinifyOptions = { mangle: true, compress: true };
         const jsResult = await minifyJS(originalCode, jsOptions);
         if (jsResult.code) {
-          fs.writeFileSync(filePath, jsResult.code);
+          await fs.writeFile(filePath, jsResult.code);
           jsCount++;
         }
       } else if (ext === ".css") {
-        // 2. Optimized CSS using LightningCSS (Natively compiles & minifies nested blocks)
+        const codeBuffer = await fs.readFile(filePath);
         const cssResult = lightningcss.transform({
           filename: filePath,
-          code: fs.readFileSync(filePath), // Pass buffer directly
+          code: codeBuffer,
           minify: true,
           sourceMap: false,
         });
 
-        fs.writeFileSync(filePath, cssResult.code);
+        await fs.writeFile(filePath, cssResult.code);
         cssCount++;
       } else if (ext === ".html" || ext === ".htm") {
-        const originalCode = fs.readFileSync(filePath, "utf8");
+        const originalCode = await fs.readFile(filePath, "utf8");
         const htmlOptions: HTMLMinifyOptions = {
           collapseWhitespace: true,
           removeComments: true,
@@ -77,10 +79,10 @@ async function minifySite(): Promise<void> {
           },
         };
         const htmlResult = await minifyHTML(originalCode, htmlOptions);
-        fs.writeFileSync(filePath, htmlResult);
+        await fs.writeFile(filePath, htmlResult);
         htmlCount++;
       }
-    }
+    });
 
     console.log("\nProduction optimization complete!");
     console.log(
