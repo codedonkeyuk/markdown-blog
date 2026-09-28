@@ -29,7 +29,7 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "node --test --experimental-strip-types --experimental-test-module-mocks \"**/*.test.ts\"",
     "coverage": "node --experimental-strip-types --experimental-test-module-mocks --test --experimental-test-coverage \"**/*.test.ts\"",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@types/clean-css": "^4.2.11",
