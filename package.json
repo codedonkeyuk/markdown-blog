@@ -36,11 +36,9 @@
     "@types/html-minifier-terser": "^7.0.2",
     "@types/live-server": "^1.2.3",
     "@types/node": "^26.1.1",
-    "html-minifier-terser": "^7.2.0",
     "husky": "^9.1.7",
     "live-server": "^1.2.2",
     "prettier": "3.9.5",
-    "terser": "^5.49.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
@@ -48,7 +46,9 @@
     "html-validate": "^11.5.5",
     "lightningcss": "^1.32.0",
     "sharp": "^0.35.3",
-    "shiki": "^4.3.1"
+    "shiki": "^4.3.1",
+    "terser": "^5.49.0",
+    "html-minifier-terser": "^7.2.0"
   },
   "overrides": {
     "braces": "^3.0.3",
