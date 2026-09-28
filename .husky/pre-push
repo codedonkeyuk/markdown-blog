@@ -2,8 +2,8 @@
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 # 1. Ask Git to compare the local package.json against the last known server commit
-# If the version line is identical, grep will find a match and return 0.
-git diff origin/"$BRANCH" package.json | grep -q '+"version":'
+# 2>/dev/null prevents a silent crash if the remote tracking branch doesn't exist yet
+git diff origin/"$BRANCH" package.json 2>/dev/null | grep -q '+"version":'
 VERSION_CHANGED=$?
 
 # 2. Defensive Stop: If the version hasn't changed (exit code is 1)
