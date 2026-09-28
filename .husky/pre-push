@@ -1,0 +1,28 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Get the current local branch name (e.g., main or master)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# 1. Ask Git to compare the local package.json against the last known server commit
+# If the version line is identical, grep will find a match and return 0.
+git diff origin/"$BRANCH" package.json | grep -q '+"version":'
+VERSION_CHANGED=$?
+
+# 2. Defensive Stop: If the version hasn't changed (exit code is 1)
+if [ $VERSION_CHANGED -ne 0 ]; then
+  CURRENT_VERSION=$(node -p "require('./package.json').version")
+  
+  echo ""
+  echo "❌ PUSH BLOCKED: You haven't updated the version number."
+  echo "👉 Run one of these commands first to choose your release level:"
+  echo "   npm version patch | minor | major"
+  echo ""
+  exit 1
+fi
+
+# 3. If you DID change it, make sure the matching Git tag exists locally
+FINAL_VERSION=$(node -p "require('./package.json').version")
+if ! git rev-parse "v$FINAL_VERSION" >/dev/null 2>&1; then
+  git tag "v$FINAL_VERSION"
+fi
