@@ -2,31 +2,19 @@ set -e
 
 while read -r local_ref local_sha remote_ref remote_sha
 do
-  # Allow a first push to a new branch
+  # Allow the first push to a new branch
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
     continue
   fi
 
-  CURRENT_VERSION=$(npm pkg get version | tr -d '"[:space:]')
-
-  OLD_VERSION=$(
-    git show "$remote_sha:package.json" |
-      node -e '
-        let input = "";
-        process.stdin.on("data", chunk => input += chunk);
-        process.stdin.on("end", () => {
-          console.log(JSON.parse(input).version);
-        });
-      '
-  )
-
-  if [ "$CURRENT_VERSION" = "$OLD_VERSION" ]; then
-    echo "Push rejected: package version has not changed."
-    echo "Version: $CURRENT_VERSION"
+  # Check whether the package.json version line changed
+  if ! git diff --unified=0 "$remote_sha" "$local_sha" -- package.json |
+    grep -qE '^[+-][[:space:]]*"version"[[:space:]]*:'; then
+    echo "Push rejected: package.json version has not changed."
     exit 1
   fi
 
-  echo "Version changed: $OLD_VERSION -> $CURRENT_VERSION"
+  echo "Package version changed."
 done
 
 exit 0
