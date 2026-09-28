@@ -1,14 +1,18 @@
-# Get the current local branch name (e.g., main or master)
+# Get the current local branch name
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
+# Read version using pure shell (bypasses node path limitations in git hooks)
+get_version() {
+  grep '"version":' package.json | head -1 | awk -F'"' '{print $4}'
+}
+
 # 1. Ask Git to compare the local package.json against the last known server commit
-# 2>/dev/null prevents a silent crash if the remote tracking branch doesn't exist yet
 git diff origin/"$BRANCH" package.json 2>/dev/null | grep -q '+"version":'
 VERSION_CHANGED=$?
 
 # 2. Defensive Stop: If the version hasn't changed (exit code is 1)
 if [ $VERSION_CHANGED -ne 0 ]; then
-  CURRENT_VERSION=$(node -p "require('./package.json').version")
+  CURRENT_VERSION=$(get_version)
   
   echo ""
   echo "❌ PUSH BLOCKED: You haven't updated the version number."
@@ -19,7 +23,7 @@ if [ $VERSION_CHANGED -ne 0 ]; then
 fi
 
 # 3. If you DID change it, make sure the matching Git tag exists locally
-FINAL_VERSION=$(node -p "require('./package.json').version")
+FINAL_VERSION=$(get_version)
 if ! git rev-parse "v$FINAL_VERSION" >/dev/null 2>&1; then
   git tag "v$FINAL_VERSION"
 fi
