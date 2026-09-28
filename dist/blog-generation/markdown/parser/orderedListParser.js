@@ -1,0 +1,38 @@
+import textParser from "./textParser.js";
+export const orderedListRegex = /^[ \t]*\d+[.)]\s+.+(?:\n[ \t]*\d+[.)]\s+.+)*/gm;
+export const orderedListParse = (match) => {
+    const lines = match.split("\n");
+    let html = "<ol>\n";
+    const indentStack = [0];
+    for (let i = 0; i < lines.length; i++) {
+        const lineMatch = lines[i].match(/^([ \t]*)\d+[.)]\s+(.+)$/);
+        if (!lineMatch)
+            continue;
+        const [, indentation, content] = lineMatch;
+        const escapedContent = textParser(content);
+        const currentIndent = indentation.replace(/\t/g, "  ").length;
+        const lastIndent = indentStack[indentStack.length - 1];
+        if (currentIndent > lastIndent) {
+            indentStack.push(currentIndent);
+            html = html.trimEnd().replace(/<\/li>$/, "");
+            html += "\n<ol>\n<li>" + escapedContent + "</li>";
+        }
+        else if (currentIndent < lastIndent) {
+            while (indentStack.length > 1 &&
+                currentIndent < indentStack[indentStack.length - 1]) {
+                indentStack.pop();
+                html += "\n</ol>\n</li>";
+            }
+            html += "\n<li>" + escapedContent + "</li>";
+        }
+        else {
+            html += (i === 0 ? "" : "\n") + "<li>" + escapedContent + "</li>";
+        }
+    }
+    while (indentStack.length > 1) {
+        indentStack.pop();
+        html += "\n</ol>\n</li>";
+    }
+    return html + "\n</ol>";
+};
+//# sourceMappingURL=orderedListParser.js.map

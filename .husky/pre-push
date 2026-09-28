@@ -18,7 +18,7 @@ do
     echo " package.json version has not changed."
     echo ""
     echo " Update the version before pushing, for example:"
-    echo "   npm version patch "
+    echo "   npm version patch"
     echo ""
     echo " Then commit the change and push again."
     echo "============================================================"
