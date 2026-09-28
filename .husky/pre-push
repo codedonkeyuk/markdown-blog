@@ -10,7 +10,19 @@ do
   # Check whether the package.json version line changed
   if ! git diff --unified=0 "$remote_sha" "$local_sha" -- package.json |
     grep -qE '^[+-][[:space:]]*"version"[[:space:]]*:'; then
-    echo "Push rejected: package.json version has not changed."
+    echo ""
+    echo "============================================================"
+    echo " PUSH REJECTED"
+    echo "============================================================"
+    echo ""
+    echo " package.json version has not changed."
+    echo ""
+    echo " Update the version before pushing, for example:"
+    echo "   npm version patch --no-git-tag-version"
+    echo ""
+    echo " Then commit the change and push again."
+    echo "============================================================"
+    echo ""
     exit 1
   fi
 
