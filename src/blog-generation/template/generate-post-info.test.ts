@@ -30,7 +30,6 @@ describe("Test generate-post-info.ts", () => {
     (path: string, options?: any) => Promise<string>
   >;
 
-  // Unique query tracking id index counter to cleanly bypass the ESM loader cache
   let cacheBustCounter = 0;
 
   beforeEach(async () => {
@@ -47,11 +46,10 @@ describe("Test generate-post-info.ts", () => {
         nameSlug: "my-post",
         pageDescription: "A new post",
         postThumbDescription: "A new post",
-        publish: true, // Fixed: Added to prevent .filter() from skipping this post
+        publish: true,
       });
     });
 
-    // 2. Updated namedExports/defaultExport keys to modern exports blocks to fix loader deprecation bugs
     mock.module(
       new URL("../file-utils/read-directories.ts", import.meta.url).href,
       {

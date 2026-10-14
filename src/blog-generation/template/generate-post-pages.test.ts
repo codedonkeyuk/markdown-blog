@@ -175,7 +175,7 @@ describe("Test generate-post-pages.ts", async () => {
     const testee = await import("./generate-post-pages.ts");
     await testee.default(posts);
 
-    assert.strictEqual(readFileMock.mock.callCount(), 3); // template + 2 content.md files
+    assert.strictEqual(readFileMock.mock.callCount(), 3);
     assert.strictEqual(
       readFileMock.mock.calls[0].arguments[0],
       "./src/blog/post/post.html",

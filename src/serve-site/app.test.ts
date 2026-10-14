@@ -46,7 +46,7 @@ test("Live Server Middleware Tests", async (t) => {
   );
 
   await t.test("should not change url if file does not exist", () => {
-    const req = { url: "/contact" }; // contact.html doesn't exist
+    const req = { url: "/contact" };
     let nextCalled = false;
 
     middleware(req, {}, () => {

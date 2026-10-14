@@ -1,5 +1,5 @@
 import * as fs from "fs/promises";
-import * as fsSync from "fs"; // Kept for the synchronous directory scanner
+import * as fsSync from "fs";
 import * as path from "path";
 import { minify as minifyJS } from "terser";
 import * as lightningcss from "lightningcss";
