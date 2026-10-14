@@ -49,7 +49,7 @@ const createPostPage = async (
     .replace(templateParameterRegex("POST-HEADING"), postInfo.name)
     .replace(
       templateParameterRegex("POST-IMAGE"),
-      `<img src="${baseDirectory}post-image.svg" alt="${postInfo.postThumbDescription}" width="1200" height="400"/>`,
+      `<img src="${baseDirectory}post-image.svg" alt="${postInfo.postThumbDescription}" width="1200" height="400" fetchpriority="high" loading="eager"/>`,
     )
     .replace(templateParameterRegex("POST-DATE"), postInfo.creationDate)
     .replace(templateParameterRegex("POST-TIME"), postInfo.creationTime)

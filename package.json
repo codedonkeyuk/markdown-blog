@@ -1,6 +1,6 @@
 {
   "name": "markdown-blog",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A static site that converts markdown into blog pages",
   "homepage": "https://github.com/codedonkeyuk/markdown-blog#readme",
   "bugs": {
@@ -45,7 +45,7 @@
     "html-minifier-terser": "^7.2.0",
     "html-validate": "^11.5.5",
     "lightningcss": "^1.32.0",
-    "live-server": "^1.2.2",
+    "live-server": "^1.2.0",
     "sharp": "^0.35.3",
     "shiki": "^4.3.1",
     "terser": "^5.49.0"
