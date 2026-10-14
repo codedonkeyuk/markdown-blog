@@ -73,7 +73,6 @@ describe("Test app.ts", () => {
 
     assert.match(generatedContent, /caches\.match\("\/offline"\)/);
 
-    // Fixed: Updated to match the optional chaining (?.) in the new sw logic
     assert.match(
       generatedContent,
       /\.get\("accept"\)\?\.includes\("text\/html"\)/,

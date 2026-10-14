@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
-import { imageRegex, imageParse } from "./imageParser.ts"; // Update with your actual file path
+import { imageRegex, imageParse } from "./imageParser.ts";
 
 describe("Image Parser Module", () => {
   describe("Isolated Function Arguments", () => {
@@ -109,7 +109,7 @@ describe("Image Parser Module", () => {
         (_: string, altText?: string, url?: string) =>
           imageParse("/images/", _, altText, url),
       );
-      // String should remain untouched because it lacks the "!" prefix
+
       assert.strictEqual(
         output,
         "This is a standard link: [Click Here](https://example.com)",

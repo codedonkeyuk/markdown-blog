@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import fsSync from "fs"; // Kept for the synchronous generator
+import fsSync from "fs";
 import crypto from "crypto";
 import path from "path";
 import appConfig from "../../app-config.ts";

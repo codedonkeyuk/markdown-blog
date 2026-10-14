@@ -5,13 +5,11 @@ import { italicRegex, italicParse } from "./italicParser.ts";
 describe("Italic Parser Module", () => {
   describe("Isolated Function Logic", () => {
     it("should use the 2nd argument (italic1) when asterisks match", () => {
-      // Passes text into the 2nd argument position
       const result = italicParse("*hello*", "hello", undefined as any);
       assert.strictEqual(result, "<em>hello</em>");
     });
 
     it("should use the 3rd argument (italic2) when underscores match", () => {
-      // Passes text into the 3rd argument position to test the fallback logic
       const result = italicParse("_world_", undefined as any, "world");
       assert.strictEqual(result, "<em>world</em>");
     });
