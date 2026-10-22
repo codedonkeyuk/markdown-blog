@@ -1,32 +1,28 @@
 # markdown-blog
 
-This is a utility project, that allows you to add a markdown blog to a static html website. Its also provides tools that are useful for static web development, like a demo servers, html validation
-
-I built this because I don't wnat the security overhead of running a next.js serverside application. I want to focus on writing code, static sites are very secure.
-
-I hate most CMSs because of the security risks they pose, and their performance issues. There are good static generators out there, but I wanted complete creative control, I don't want to to configure other folks plugins every few weeks. I also wanted to stream line the delivery of posts, so that is does not impact on my spare time.
-
-Selfishly I like drawing SVG's, I not only find it easy but also very satisfying. You also get better performance from SVG's, and look better on different sized devices. You can enbed other image formats within the blog content `content.md`, but thumbnail and post images are strictly SVG.
+This is a static CMS project. This library has been designed to generate a blog from mardown files. When imported into another project, that project can use commands to add a post, generate the site, server the site etc.
 
 # Project instructions (For developers)
 
 ## Project Layout
 
-This project is very big and convoluted. I suspect ill break the templating logic into a separate project in the future. Run it like babel, or web pack. For now there is a we bit of a learning curve, sorry!
-
 | Path.               | Description                                                                                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/assets/site`      | This is the static site that the blog is built from. When you run `serve-dev` you are serving this directory. Blog content can only be seen in `dist` and is served from `serve-prod` |
-| `/tmp/blog-content` | This is where the blog contentlives. Each subdirectory is a new blog entry. After you run create post you edidt the various files in here                                             |
+| `/tmp/blog-content` | This is where the blog contentlives. Each subdirectory is a new blog entry. After you run create post you edit the various files in here                                              |
 | `/tmp/site`         | Directory into which the static site is generated. You can also test this locally via `npm run serveProd`                                                                             |
 | `/src`              | Source code of the project written in typescript                                                                                                                                      |
 | `/dist`             | Javascript used in module generated from src                                                                                                                                          |
 
-"siteSourcePath": "./assets/site",
-"postSourcePath": "./tmp/blog-content",
-"productionPath": "./tmp/site"
-
 ## Commands
+
+This is quite a convoluted project, so i have split the commands into two distinked sctions.
+
+The core commands are for the project generation.
+
+Live test commands are the commands that are exported by the porject for website creation. This is used locally for testing.
+
+### Core Commands for Building Libray
 
 | Command            | Description                                                      |
 | ------------------ | ---------------------------------------------------------------- |
@@ -35,6 +31,17 @@ This project is very big and convoluted. I suspect ill break the templating logi
 | `npm run build`    | builds the project in dist directory.                            |
 | `npm run test`     | Runs the tests found in the src/code                             |
 | `npm run coverage` | Runs coverage report                                             |
+
+### Live Test Commands
+
+| Command                | Description                                                      |
+| ---------------------- | ---------------------------------------------------------------- |
+| `npm run buildBlog`    | Builds the blog from the static assets found in blog-config.json |
+| `npm run createPost`   | Createa a new markdown post to generate post pages from          |
+| `npm run validateDev`  | Validates the dev assets (before site build)                     |
+| `npm run validateProd` | Validates the prod assets (after site build)                     |
+| `npm run serveDev`     | Serves the template unmodified                                   |
+| `npm run serveProd`    | Serves the generated website (ppost buildBlog)                   |
 
 # Tool instructions (For website creators)
 

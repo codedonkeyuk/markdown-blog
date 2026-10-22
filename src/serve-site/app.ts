@@ -1,30 +1,29 @@
-import liveServer from "live-server";
-import fs from "fs";
+import { createServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const customRoot = process.argv[2];
+const rawRoot = process.argv[2] || ".";
+const customRoot = path.resolve(process.cwd(), rawRoot);
 
-const params = {
-  port: 3001,
-  root: customRoot,
-  open: true,
-  middleware: [
-    function (req: { url: string }, _: any, next: () => void) {
-      const urlPath = req.url.split("?")[0];
-      if (urlPath !== "/" && !path.extname(urlPath)) {
-        const targetFile = path.resolve(customRoot, `${urlPath.slice(1)}.html`);
+async function startServer() {
+  const server = await createServer({
+    root: customRoot,
 
-        if (fs.existsSync(targetFile)) {
-          req.url = `${urlPath}.html`;
-        }
-      }
-      next();
+    server: {
+      port: 3001,
+      open: true,
     },
-  ],
-};
+  });
 
-liveServer.start(params);
+  await server.listen();
+
+  server.printUrls();
+}
+
+startServer().catch((err) => {
+  console.error("Failed to start Vite server:", err);
+  process.exit(1);
+});
