@@ -2,7 +2,7 @@
 
 This is a static CMS project. This library has been designed to generate a blog from mardown files. When imported into another project, that project can use commands to add a post, generate the site, server the site etc.
 
-# Project instructions (For developers)
+# Project instructions (for developers)
 
 ## Project Layout
 
