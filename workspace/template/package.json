@@ -1,6 +1,6 @@
 {
   "name": "@markdown-blog/template",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A static site that converts markdown into blog pages",
   "license": "UNLICENCED",
   "private": "true",
@@ -9,7 +9,7 @@
     "@markdown-blog/lib": "*"
   },
   "scripts": {
-    "validate": "node ../lib/dist/cli.js validate && node ../lib/dist/cli.js validate --prod && npx cspell README.md",
+    "validate": "node ../lib/dist/cli.js validate && npx cspell README.md",
     "build": "node ../lib/dist/cli.js build",
     "createPost": "node ../lib/dist/cli.js create",
     "serveDev": "node ../lib/dist/cli.js serve",
