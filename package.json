@@ -1,6 +1,6 @@
 {
   "name": "markdown-blog",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A static site that converts markdown into blog pages",
   "license": "UNLICENCED",
   "private": "true",
@@ -10,7 +10,7 @@
     "workspace/lib",
     "workspace/template"
   ],
-"scripts": {
+  "scripts": {
     "validate": "npm run validate --workspaces --if-present && npx cspell README.md",
     "test": "npm test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
