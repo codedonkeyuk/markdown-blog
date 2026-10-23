@@ -23,7 +23,8 @@ describe("Test html-validate-dev.ts", async () => {
   });
 
   test("Ensure html-validate is called, with correct arguements", async () => {
-    await import("../validate-dev.ts");
+    const { default: main } = await import(`../validate-dev.ts`);
+    await main();
     assert.strictEqual(htmlValidateMock.mock.callCount(), 1);
     assert.deepStrictEqual(htmlValidateMock.mock.calls[0].arguments, [
       "../template/src/site",

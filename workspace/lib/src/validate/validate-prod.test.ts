@@ -45,7 +45,8 @@ describe("Test html-validate-prod.ts", async () => {
   });
 
   test("Ensure html-validate is called, with correct arguements", async () => {
-    await import("./validate-prod.ts");
+    const { default: main } = await import("./validate-prod.ts");
+    await main();
     assert.strictEqual(generatePostInfoSpy.mock.callCount(), 1);
     assert.strictEqual(spellCheckSpy.mock.callCount(), 1);
     assert.strictEqual(htmlValidateMock.mock.callCount(), 1);

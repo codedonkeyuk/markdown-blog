@@ -4,12 +4,16 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import appConfig from "../app-config.ts";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+export default async function App() {
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const projectRoot = resolve(__dirname, "../../");
+  const appPath = resolve(projectRoot, "dist/serve-site/app.js");
 
-const { siteSourcePath } = appConfig;
-process.argv.push(siteSourcePath);
+  const { siteSourcePath } = appConfig;
 
-const projectRoot = resolve(__dirname, "../../");
-const appPath = resolve(projectRoot, "dist/serve-site/app.js");
+  const absoluteProdPath = resolve(process.cwd(), siteSourcePath);
 
-await import(pathToFileURL(appPath).href);
+  process.argv = [process.argv[0], process.argv[1], absoluteProdPath];
+
+  await import(pathToFileURL(appPath).href);
+}

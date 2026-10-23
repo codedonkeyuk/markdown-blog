@@ -88,7 +88,8 @@ describe("Test app.ts", () => {
     rssFeedMock.mock.mockImplementation(async () => {});
     hashAssets.mock.mockImplementation(async () => {});
 
-    await import(`./app.ts`);
+    const { default: main } = await import("./app.ts");
+    await main();
 
     assert.strictEqual(deleteDirContentsMock.mock.callCount(), 2);
     assert.strictEqual(copyFolderContentsMock.mock.callCount(), 1);

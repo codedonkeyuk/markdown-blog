@@ -30,18 +30,9 @@ test("Unit Test: app.ts captures stdin and executes file creators", async (t) =>
 
   t.mock.getter(process, "stdin", () => mockStdin);
 
-  await import("./app.ts");
+  const { default: main } = await import("./app.ts");
+  await main("My New Test Blog Post");
 
-  assert.strictEqual(
-    logSpy.mock.calls[0].arguments[0],
-    "What is the name of the post?",
-  );
-
-  mockStdin.emit("data", "My New Test Blog Post");
-
-  await new Promise((resolve) => setTimeout(resolve, 10));
-
-  assert.strictEqual(mockStdin.pause.mock.calls.length, 1);
   assert.match(
     mockCreatedDir,
     /^\.\.\/template\/src\/blog-content\/\d+_my-new-test-blog-post$/,

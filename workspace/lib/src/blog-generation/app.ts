@@ -10,18 +10,20 @@ import injectServiceWorker from "./service-worker/inject-service-worker.ts";
 import rssFeed from "./rss/rss-feed.ts";
 import hashAssets from "./hashing/hash-assets.ts";
 
-const { productionPath, siteSourcePath, blogProductionPath } = appConfig;
+export default async function App() {
+  const { productionPath, siteSourcePath, blogProductionPath } = appConfig;
 
-await deleteDirContents(productionPath);
-await copyFolderContents(siteSourcePath, productionPath);
-await deleteDirContents(blogProductionPath);
+  await deleteDirContents(productionPath);
+  await copyFolderContents(siteSourcePath, productionPath);
+  await deleteDirContents(blogProductionPath);
 
-const postInfo = await generatePostInfo();
-await generatePostPages(postInfo);
-await generateIndexes(postInfo);
+  const postInfo = await generatePostInfo();
+  await generatePostPages(postInfo);
+  await generateIndexes(postInfo);
 
-await Promise.all([injectServiceWorker(), rssFeed(postInfo)]);
+  await Promise.all([injectServiceWorker(), rssFeed(postInfo)]);
 
-await hashAssets();
+  await hashAssets();
 
-await minifySite();
+  await minifySite();
+}

@@ -9,10 +9,10 @@
     "@markdown-blog/lib": "*"
   },
   "scripts": {
-    "validate": "validate-dev && validate-prod",
-    "build": "build-blog",
-    "createPost": "create-post",
-    "serveDev": "serve-dev",
-    "serveProd": "serve-prod"
+    "validate": "node ../lib/dist/cli.js validate && node ../lib/dist/cli.js validate --prod",
+    "build": "node ../lib/dist/cli.js build",
+    "createPost": "node ../lib/dist/cli.js create",
+    "serveDev": "node ../lib/dist/cli.js serve",
+    "serveProd": "node ../lib/dist/cli.js serve --prod"
   }
 }

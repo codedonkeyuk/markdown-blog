@@ -40,7 +40,10 @@ mock.module(
 );
 
 test("Test validate-dev", async () => {
-  await import(`./validate-dev.ts?update=${Date.now()}`);
+  const { default: main } = await import(
+    `./validate-dev.ts?update=${Date.now()}`
+  );
+  await main();
   assert.strictEqual(generatePostInfoSpy.mock.callCount(), 1);
   assert.strictEqual(spellCheckSpy.mock.callCount(), 1);
   assert.strictEqual(htmlValidateSpy.mock.callCount(), 1);
