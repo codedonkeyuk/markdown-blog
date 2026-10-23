@@ -2,31 +2,48 @@ set -e
 
 while read -r local_ref local_sha remote_ref remote_sha
 do
-  # Allow the first push to a new branch
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
     continue
   fi
 
-  # Check whether the package.json version line changed
-  if ! git diff --unified=0 "$remote_sha" "$local_sha" -- package.json |
-    grep -qE '^[+-][[:space:]]*"version"[[:space:]]*:'; then
-    echo ""
-    echo "============================================================"
-    echo " PUSH REJECTED"
-    echo "============================================================"
-    echo ""
-    echo " package.json version has not changed."
-    echo ""
-    echo " Update the version before pushing, for example:"
-    echo "   npm version patch"
-    echo ""
-    echo " Then commit the change and push again."
-    echo "============================================================"
-    echo ""
-    exit 1
+  CHANGED_FILES=$(git diff --name-only "$remote_sha" "$local_sha")
+
+  for WORKSPACE_PATH in workspace/*/; do
+    # Skip if it's not a real directory
+    [ -d "$WORKSPACE_PATH" ] || continue
+
+    # Did any files change inside this specific workspace folder?
+    if echo "$CHANGED_FILES" | grep -q "^${WORKSPACE_PATH}"; then
+      
+      # Files changed! Now check if this workspace's package.json version was bumped
+      if ! git diff --unified=0 "$remote_sha" "$local_sha" -- "${WORKSPACE_PATH}package.json" 2>/dev/null | grep -q '^[+][[:space:]]*"version"'; then
+        echo ""
+        echo "============================================================"
+        echo " PUSH REJECTED: VERSION BUMP REQUIRED"
+        echo "============================================================"
+        echo " You modified files inside: $WORKSPACE_PATH"
+        echo " But you forgot to bump the version in: ${WORKSPACE_PATH}package.json"
+        echo " command: npm version patch"
+        echo "============================================================"
+        exit 1
+      fi
+    fi
+  done
+
+  if echo "$CHANGED_FILES" | grep -qv "^workspace/"; then
+    if ! git diff --unified=0 "$remote_sha" "$local_sha" -- package.json | grep -q '^[+][[:space:]]*"version"'; then
+      echo ""
+      echo "============================================================"
+      echo " PUSH REJECTED: ROOT VERSION BUMP REQUIRED"
+      echo "============================================================"
+      echo " You modified global/root files."
+      echo " You must bump the version in the root package.json"
+      echo " command: npm version patch"
+      echo "============================================================"
+      exit 1
+    fi
   fi
 
-  echo "Package version changed."
 done
 
 exit 0

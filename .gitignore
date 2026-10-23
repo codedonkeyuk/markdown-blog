@@ -1,6 +1,3 @@
 .DS_Store
 /node_modules
-/src/blog/post/**/*.*
-/tmp/blog-content/*/*.*
-/tmp/site/**/*.*
 .vscode

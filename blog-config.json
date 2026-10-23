@@ -1,7 +1,0 @@
-{
-  "author": "Joe Bloggs",
-  "siteSourcePath": "./assets/site",
-  "postSourcePath": "./tmp/blog-content",
-  "productionPath": "./tmp/site",
-  "spellingExemptions": ["enshittification", "vite"]
-}

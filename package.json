@@ -1,62 +1,23 @@
 {
   "name": "markdown-blog",
-  "version": "1.0.10",
+  "version": "1.0.15",
   "description": "A static site that converts markdown into blog pages",
-  "homepage": "https://github.com/codedonkeyuk/markdown-blog#readme",
-  "bugs": {
-    "url": "https://github.com/codedonkeyuk/markdown-blog/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codedonkeyuk/markdown-blog.git"
-  },
   "license": "UNLICENCED",
   "private": "true",
   "author": "Leigh G",
   "type": "module",
-  "bin": {
-    "build-blog": "./dist/blog-generation/app.js",
-    "create-post": "./dist/create-post/app.js",
-    "validate-dev": "./dist/validate/validate-dev.js",
-    "validate-prod": "./dist/validate/validate-prod.js",
-    "serve-dev": "./dist/serve-site/serve-dev.js",
-    "serve-prod": "./dist/serve-site/serve-prod.js"
-  },
+  "workspaces": [
+    "workspace/lib",
+    "workspace/template"
+  ],
   "scripts": {
-    "validate": "node src/validate/validate-dev.ts && prettier . --check && tsc --noEmit",
-    "clean": "prettier . --write",
-    "prebuild": "npm run validate && npm run test",
-    "build": "tsc -p tsconfig.build.json",
-    "test": "node --test --experimental-strip-types --experimental-test-module-mocks \"**/*.test.ts\"",
-    "coverage": "node --experimental-strip-types --experimental-test-module-mocks --test --experimental-test-coverage \"**/*.test.ts\"",
-    "buildBlog": "node ./src/blog-generation/app.ts",
-    "createPost": "node ./src/create-post/app.ts",
-    "validateDev": "node ./src/validate/validate-dev.ts",
-    "validateProd": "node ./src/validate/validate-prod.ts",
-    "serveDev": "node ./src/serve-site/serve-dev.ts",
-    "serveProd": "node ./src/serve-site/serve-prod.ts",
+    "validate": "npm run validate --workspaces --if-present && npx cspell README.md",
+    "test": "npm test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
     "prepare": "husky || true"
   },
   "devDependencies": {
-    "@types/clean-css": "^4.2.11",
-    "@types/html-minifier-terser": "^7.0.2",
-    "@types/live-server": "^1.2.3",
-    "@types/node": "^26.1.1",
-    "husky": "^9.1.7",
-    "prettier": "3.9.5",
-    "typescript": "^7.0.2"
-  },
-  "dependencies": {
     "cspell": "^10.0.1",
-    "html-minifier-terser": "^7.2.0",
-    "html-validate": "^11.5.5",
-    "lightningcss": "^1.32.0",
-    "sharp": "^0.35.3",
-    "shiki": "^4.3.1",
-    "terser": "^5.49.0",
-    "vite": "^8.3.5"
-  },
-  "allowScripts": {
-    "fsevents@1.2.13": true
+    "husky": "^9.1.7"
   }
 }

@@ -1,0 +1,18 @@
+{
+  "name": "@markdown-blog/template",
+  "version": "1.0.4",
+  "description": "A static site that converts markdown into blog pages",
+  "license": "UNLICENCED",
+  "private": "true",
+  "type": "module",
+  "dependencies": {
+    "@markdown-blog/lib": "*"
+  },
+  "scripts": {
+    "validate": "node ../lib/dist/cli.js validate && npx cspell README.md",
+    "build": "node ../lib/dist/cli.js build",
+    "createPost": "node ../lib/dist/cli.js create",
+    "serveDev": "node ../lib/dist/cli.js serve",
+    "serveProd": "node ../lib/dist/cli.js serve --prod"
+  }
+}
