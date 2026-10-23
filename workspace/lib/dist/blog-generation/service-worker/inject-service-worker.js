@@ -1,0 +1,149 @@
+import fs from "fs";
+import path from "path";
+import createFile from "../file-utils/create-file.js";
+import appConfig from "../../app-config.js";
+const { productionPath } = appConfig;
+const generateAssetHash = (assets) => {
+    const str = assets.join(",");
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash |= 0;
+    }
+    return Math.abs(hash);
+};
+function* walkDir(dir) {
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+        const fullPath = path.join(dir, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            yield* walkDir(fullPath);
+        }
+        else {
+            yield fullPath;
+        }
+    }
+}
+const serviceWorkerContent = (versionNo, assets) => `
+const CACHE_NAME = "site-assets-v${versionNo}";
+
+const PRECACHE_ASSETS = ${JSON.stringify(assets, null, 2)};
+
+function trimCache(cacheName, maxItems) {
+  caches.open(cacheName).then((cache) => {
+    cache.keys().then((keys) => {
+      if (keys.length > maxItems) {
+        cache.delete(keys[0]).then(() => {
+          trimCache(cacheName, maxItems);
+        });
+      }
+    });
+  });
+}
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(PRECACHE_ASSETS);
+      })
+      .then(() => self.skipWaiting()),
+  );
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cache) => {
+            if (cache !== CACHE_NAME) {
+              return caches.delete(cache);
+            }
+          }),
+        );
+      })
+      .then(() => self.clients.claim()),
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  if (
+    event.request.method !== "GET" ||
+    !event.request.url.startsWith(self.location.origin)
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+            trimCache(CACHE_NAME, 50);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          if (event.request.headers.get("accept")?.includes("text/html")) {
+            return caches.match("/offline");
+          }
+        });
+      }),
+  );
+});
+`;
+const injectServiceWorker = async () => {
+    const dynamicAssets = ["/"];
+    const CACHEABLE_EXTENSIONS = [
+        ".html",
+        ".css",
+        ".js",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".svg",
+        ".webp",
+        ".ico",
+        ".woff2",
+    ];
+    for (const filePath of walkDir(path.resolve(productionPath))) {
+        const fileName = path.basename(filePath).toLowerCase();
+        const ext = path.extname(filePath).toLowerCase();
+        if (fileName === "sw.js" || fileName === "rss.xml") {
+            continue;
+        }
+        if (CACHEABLE_EXTENSIONS.includes(ext)) {
+            let webPath = "/" +
+                path
+                    .relative(path.resolve(productionPath), filePath)
+                    .replace(/\\/g, "/")
+                    .toLowerCase();
+            if (webPath.endsWith("/index.html")) {
+                webPath = webPath.slice(0, -11);
+                if (webPath === "")
+                    webPath = "/";
+            }
+            else if (webPath.endsWith(".html")) {
+                webPath = webPath.slice(0, -5);
+            }
+            if (!dynamicAssets.includes(webPath)) {
+                dynamicAssets.push(webPath);
+            }
+        }
+    }
+    const versionNo = generateAssetHash(dynamicAssets);
+    return createFile(`${productionPath}/sw.js`, serviceWorkerContent(versionNo, dynamicAssets));
+};
+export default injectServiceWorker;
+//# sourceMappingURL=inject-service-worker.js.map
