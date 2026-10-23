@@ -1,6 +1,6 @@
 {
   "name": "@markdown-blog/template",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A static site that converts markdown into blog pages",
   "license": "UNLICENCED",
   "private": "true",
