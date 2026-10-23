@@ -9,7 +9,7 @@
     "@markdown-blog/lib": "*"
   },
   "scripts": {
-    "validate": "node ../lib/dist/cli.js validate && node ../lib/dist/cli.js validate --prod",
+    "validate": "node ../lib/dist/cli.js validate && node ../lib/dist/cli.js validate --prod && npx cspell README.md",
     "build": "node ../lib/dist/cli.js build",
     "createPost": "node ../lib/dist/cli.js create",
     "serveDev": "node ../lib/dist/cli.js serve",

@@ -9,7 +9,7 @@
     "markdown-blog": "./dist/cli.js"
   },
   "scripts": {
-    "validate": "prettier . --check && tsc --noEmit",
+    "validate": "prettier . --check && tsc --noEmit && npx cspell README.md",
     "clean": "prettier . --write",
     "prebuild": "npm run validate && npm run test",
     "build": "tsc -p tsconfig.build.json",
@@ -21,13 +21,11 @@
     "@types/html-minifier-terser": "^7.0.2",
     "@types/live-server": "^1.2.3",
     "@types/node": "^26.1.1",
-    "husky": "^9.1.7",
     "prettier": "3.9.5",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "commander": "^15.0.0",
-    "cspell": "^10.0.1",
     "html-minifier-terser": "^7.2.0",
     "html-validate": "^11.5.5",
     "lightningcss": "^1.32.0",

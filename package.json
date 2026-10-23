@@ -11,9 +11,13 @@
     "workspace/template"
   ],
 "scripts": {
-    "validate": "npm run validate --workspaces --if-present",
+    "validate": "npm run validate --workspaces --if-present && npx cspell README.md",
     "test": "npm test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "cspell": "^10.0.1",
+    "husky": "^9.1.7"
   }
 }
