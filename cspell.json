@@ -1,3 +1,3 @@
 {
-  "ignoreWords": ["vite", "postinfo"]
+  "ignoreWords": ["vite", "postinfo", "gitea"]
 }
