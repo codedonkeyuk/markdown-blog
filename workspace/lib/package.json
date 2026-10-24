@@ -1,10 +1,12 @@
 {
   "name": "@markdown-blog/lib",
-  "version": "1.0.12",
+  "version": "1.0.16",
   "description": "A static site that converts markdown into blog pages",
   "license": "UNLICENCED",
-  "private": "true",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://192.168.1.200:3001/api/packages/codedonkeyuk/npm/"
+  },
   "bin": {
     "markdown-blog": "./dist/cli.js"
   },
@@ -26,6 +28,7 @@
   },
   "dependencies": {
     "commander": "^15.0.0",
+    "cspell": "^10.0.1",
     "html-minifier-terser": "^7.2.0",
     "html-validate": "^11.5.5",
     "lightningcss": "^1.32.0",

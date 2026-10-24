@@ -1,11 +1,14 @@
 {
   "name": "markdown-blog",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "A static site that converts markdown into blog pages",
   "license": "UNLICENCED",
   "private": "true",
   "author": "Leigh G",
   "type": "module",
+  "exports": {
+    "./lib": "./workspace/lib"
+  },
   "workspaces": [
     "workspace/lib",
     "workspace/template"
