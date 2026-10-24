@@ -6,6 +6,9 @@
   "private": "true",
   "author": "Leigh G",
   "type": "module",
+  "exports": {
+    "./lib": "./workspace/lib"
+  },
   "workspaces": [
     "workspace/lib",
     "workspace/template"
